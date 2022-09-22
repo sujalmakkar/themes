@@ -1,11 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import TodoApp from './Todo'
+import TimerApp from './Timer'
 
 class App extends React.Component {
     render(){
         return(
             <div>
-                that was fast bitch
+                hey there
+                <TodoApp/>
+                <TimerApp/>
             </div>
         )
     }
