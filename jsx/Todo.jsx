@@ -67,9 +67,9 @@ function TodoForm(props){
 
     return(
         <React.Fragment>
-        <form className="todo_form">
-        <input type="text" onChange={handleChange} value={todo} name="todo_input_1" className="input_type_1"/>
-        <button type="submit" onClick={submitTodo}>Add</button>
+        <form className="todo_form" onSubmit={submitTodo}>
+        <input type="text" onChange={handleChange} value={todo} name="todo_input_1" className="input_type_1" required/>
+        <button type="submit">Add</button>
         </form>
         </React.Fragment>
     )

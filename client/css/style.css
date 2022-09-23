@@ -16,7 +16,9 @@ body{
 }
 
 #TodoApp .todo-text.editable{
-    background: #1C6758;}
+    background: #A084CA;
+    outline:none;
+}
 #TodoApp .todo-text.done{
     text-decoration:line-through;
 }
@@ -24,7 +26,7 @@ body{
     display: block;
     width:100%;
     height: 100vh;
-    background: #3D8361;
-    color:#EEF2E6;
+    background: #D2DAFF;
+    color:#645CAA;
 }
 /* 1C6758 , 3D8361 , D6CDA4 , EEF2E6 */

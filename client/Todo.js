@@ -71,11 +71,11 @@ function TodoForm(props) {
         null,
         React.createElement(
             'form',
-            { className: 'todo_form' },
-            React.createElement('input', { type: 'text', onChange: handleChange, value: todo, name: 'todo_input_1', className: 'input_type_1' }),
+            { className: 'todo_form', onSubmit: submitTodo },
+            React.createElement('input', { type: 'text', onChange: handleChange, value: todo, name: 'todo_input_1', className: 'input_type_1', required: true }),
             React.createElement(
                 'button',
-                { type: 'submit', onClick: submitTodo },
+                { type: 'submit' },
                 'Add'
             )
         )
