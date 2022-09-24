@@ -6,11 +6,13 @@ import TimerApp from './Timer'
 class App extends React.Component {
     render(){
         return(
+            <React.StrictMode>
             <div>
                 hey there
                 <TodoApp/>
                 <TimerApp/>
             </div>
+            </React.StrictMode>
         )
     }
 }

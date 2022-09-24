@@ -16,7 +16,7 @@ body{
 }
 
 #TodoApp .todo-text.editable{
-    background: #A084CA;
+    background: #BFACE0;
     outline:none;
 }
 #TodoApp .todo-text.done{
@@ -29,4 +29,4 @@ body{
     background: #D2DAFF;
     color:#645CAA;
 }
-/* 1C6758 , 3D8361 , D6CDA4 , EEF2E6 */
+/* EBC7E8 , BFACE0 , A084CA , 645CAA */

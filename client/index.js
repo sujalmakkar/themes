@@ -6,11 +6,15 @@ import TimerApp from './Timer';
 class App extends React.Component {
     render() {
         return React.createElement(
-            'div',
+            React.StrictMode,
             null,
-            'hey there',
-            React.createElement(TodoApp, null),
-            React.createElement(TimerApp, null)
+            React.createElement(
+                'div',
+                null,
+                'hey there',
+                React.createElement(TodoApp, null),
+                React.createElement(TimerApp, null)
+            )
         );
     }
 }

@@ -1,19 +1,36 @@
 import React, { useState, useEffect } from 'react';
 
 class TimerApp extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { logs: [] };
+        this.addLog = this.addLog.bind(this);
+    }
+    addLog(info) {
+        var logscopy = this.state.logs;
+        logscopy.push(info);
+        this.setState({ logs: logscopy });
+    }
     render() {
         return React.createElement(
-            'div',
+            React.StrictMode,
             null,
-            'This is a Timer App',
-            React.createElement(StopWatch, null)
+            React.createElement(
+                'div',
+                null,
+                'This is a Timer App',
+                React.createElement(StopWatch, { addLog: this.addLog }),
+                React.createElement(StopWatch, { addLog: this.addLog }),
+                React.createElement(StopWatch, { addLog: this.addLog }),
+                React.createElement(StopWatchLogsDisplay, { stopWatchLogs: this.state.logs })
+            )
         );
     }
 }
 
-function StopWatch() {
+function StopWatch(props) {
 
-    const [stopWatchLog, setstopWatchLog] = useState([]);
+    const [stopWatchName, setstopWatchName] = useState('');
     const [stopWatchTime, setstopWatchTime] = useState({ timepassed: 0, milliseconds: 0, seconds: 0, minutes: 0, hours: 0, days: 0, months: 0, years: 0 });
     const [stopWatchInfo, setstopWatchInfo] = useState({ started: false });
     const [stopWatchStartTime, setstopWatchStartTime] = useState(0);
@@ -46,8 +63,6 @@ function StopWatch() {
             var intervalID = setInterval(() => {
                 timepassed = Date.now() - stopWatchStartTime - stopWatchPauseTime;
 
-                console.log(stopWatchStartTime, stopWatchPauseTime);
-
                 timepassedstring = timepassed.toString();
 
                 milliseconds = timepassedstring.slice(-3, -2);
@@ -68,7 +83,15 @@ function StopWatch() {
                 monthstext = ('0' + Math.trunc(months - Math.trunc(years) * 24)).slice(-2);
                 yearstext = ('0' + Math.trunc(months / 12)).slice(-2);
 
-                setstopWatchTime({ timepassed: timepassed, milliseconds: milliseconds, seconds: secondstext, minutes: minutestext, hours: hourstext, days: daystext, months: monthstext, years: yearstext });
+                var stopWatchTimeJson = { timepassed: timepassed, milliseconds: milliseconds };
+
+                parseInt(secondstext) > 0 ? stopWatchTimeJson.seconds = secondstext : '';
+                parseInt(minutestext) > 0 ? stopWatchTimeJson.minutes = minutestext : '';
+                parseInt(hourstext) > 0 ? stopWatchTimeJson.hours = hourstext : '';
+                parseInt(daystext) > 0 ? stopWatchTimeJson.days = daystext : '';
+                parseInt(monthstext) > 0 ? stopWatchTimeJson.months = monthstext : '';
+
+                setstopWatchTime(stopWatchTimeJson);
             }, 100);
         }
         return () => clearInterval(intervalID);
@@ -95,17 +118,26 @@ function StopWatch() {
             setstopWatchInfo({ started: false });
         }
     }
+    function handletaskname(e) {
+        var name = e.target.value;
+        setstopWatchName(name);
+    }
+    function save() {
+        setstopWatchInfo({ started: false });
+        setstopWatchStartTime(0);
+        setstopWatchPauseTime(0);
+        var infoToBeSaved = stopWatchTime;
+        infoToBeSaved.name = stopWatchName;
+        props.addLog(infoToBeSaved);
+        setstopWatchTime({ timepassed: 0, milliseconds: 0, seconds: 0, minutes: 0, hours: 0, days: 0, months: 0, years: 0 });
+        setstopWatchName('');
+    }
     function reset() {
-        if (stopWatchInfo.started) {
-            setstopWatchInfo({ started: false });
-            setstopWatchStartTime(0);
-            setstopWatchPauseTime(0);
-            var logsCopy = stopWatchLog;
-            logsCopy.push(stopWatchTime);
-            setstopWatchLog(logsCopy);
-            console.log(logsCopy);
-            setstopWatchTime({ timepassed: 0, milliseconds: 0, seconds: 0, minutes: 0, hours: 0, days: 0, months: 0, years: 0 });
-        }
+        setstopWatchName('');
+        setstopWatchInfo({ started: false });
+        setstopWatchStartTime(0);
+        setstopWatchPauseTime(0);
+        setstopWatchTime({ timepassed: 0, milliseconds: 0, seconds: 0, minutes: 0, hours: 0, days: 0, months: 0, years: 0 });
     }
 
     return React.createElement(
@@ -123,11 +155,44 @@ function StopWatch() {
                 'button',
                 { onClick: reset },
                 'reset'
+            ),
+            React.createElement(
+                'button',
+                { onClick: save },
+                'save'
+            )
+        ) : stopWatchTime.timepassed > 1 ? React.createElement(
+            React.Fragment,
+            null,
+            React.createElement(
+                'button',
+                { onClick: start },
+                'Resume'
+            ),
+            React.createElement(
+                'button',
+                { onClick: reset },
+                'reset'
+            ),
+            React.createElement(
+                'button',
+                { onClick: save },
+                'save'
             )
         ) : React.createElement(
-            'button',
-            { onClick: start },
-            'start'
+            'form',
+            { onSubmit: start },
+            React.createElement('input', { onChange: handletaskname, type: 'text', placeholder: 'enter task name' }),
+            React.createElement(
+                'button',
+                { type: 'submit' },
+                'start'
+            )
+        ),
+        React.createElement(
+            'div',
+            { className: 'stop-watch-name-display' },
+            stopWatchName.length > 0 ? stopWatchName : 'untitled'
         ),
         React.createElement(
             'div',
@@ -139,24 +204,33 @@ function StopWatch() {
             stopWatchTime.seconds > 0 ? stopWatchTime.seconds : '00',
             ' . ',
             stopWatchTime.milliseconds || 0
-        ),
+        )
+    );
+}
+
+function StopWatchLogsDisplay(props) {
+
+    return React.createElement(
+        'div',
+        { className: 'stop-watch-logs' },
         React.createElement(
-            'div',
-            { className: 'stop-watch-time-logs' },
-            React.createElement(
-                'ul',
-                null,
-                stopWatchLog.map((log, index) => React.createElement(
-                    'li',
-                    { key: index },
-                    ' ',
-                    log.days ? log.days + ':' : '',
-                    log.hours ? log.hours + ':' : '',
-                    log.minutes ? log.minutes + ':' : '',
-                    log.seconds ? log.seconds + '.' : '',
-                    log.seconds ? log.milliseconds : ''
-                ))
-            )
+            'ul',
+            null,
+            props.stopWatchLogs != [] ? props.stopWatchLogs.map((log, index) => React.createElement(
+                'li',
+                { key: index },
+                React.createElement(
+                    'span',
+                    null,
+                    log.name.length > 0 ? log.name : 'untitled'
+                ),
+                ' ',
+                log.days ? log.days + ':' : '',
+                log.hours ? log.hours + ':' : '',
+                log.minutes ? log.minutes + ':' : '00:',
+                log.seconds ? log.seconds + '.' : '00:',
+                log.milliseconds ? log.milliseconds : ''
+            )) : ''
         )
     );
 }

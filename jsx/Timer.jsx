@@ -2,19 +2,34 @@ import React ,{useState,useEffect} from 'react'
 
 
 class TimerApp extends React.Component {
+    constructor(props){
+        super(props)
+        this.state = {logs:[]}
+        this.addLog = this.addLog.bind(this)
+    }
+    addLog(info){
+        var logscopy = this.state.logs
+        logscopy.push(info)
+        this.setState({logs:logscopy})
+    }
     render(){
         return(
+            <React.StrictMode>
             <div>
                 This is a Timer App
-                <StopWatch/>
+                <StopWatch addLog = {this.addLog}/>
+                <StopWatch addLog = {this.addLog}/>
+                <StopWatch addLog = {this.addLog}/>
+                <StopWatchLogsDisplay stopWatchLogs={this.state.logs}/>
             </div>
+            </React.StrictMode>
         )
     }
 }
 
-function StopWatch(){
+function StopWatch(props){
 
-    const [stopWatchLog,setstopWatchLog] = useState([])
+    const [stopWatchName,setstopWatchName] = useState('')
     const [stopWatchTime,setstopWatchTime] = useState({timepassed:0,milliseconds:0,seconds:0,minutes:0,hours:0,days:0,months:0,years:0})
     const [stopWatchInfo,setstopWatchInfo] = useState({started:false})
     const [stopWatchStartTime,setstopWatchStartTime] = useState(0)
@@ -30,12 +45,9 @@ function StopWatch(){
 
         var totalsecondspassed = 0,timepassedstring = 0,timepassed = 0,milliseconds = 0,seconds = 0,minutes = 0,hours = 0,days = 0,months= 0,years = 0 
         var secondstext = '', minutestext ='' , hourstext = '', daystext = '' , monthstext = '', yearstext = '' ;
-        if(stopWatchInfo.started){
+        if(stopWatchInfo.started ){
         var intervalID = setInterval(()=>{
                     timepassed = Date.now()-stopWatchStartTime - stopWatchPauseTime
-
-                    console.log(stopWatchStartTime,stopWatchPauseTime)
-
                     
                     timepassedstring = timepassed.toString()
                     
@@ -56,8 +68,16 @@ function StopWatch(){
                     daystext = ('0'+(Math.trunc(days-(Math.trunc(months)*24)))).slice(-2)
                     monthstext = ('0'+(Math.trunc(months-(Math.trunc(years)*24)))).slice(-2)
                     yearstext = ('0'+(Math.trunc(months/12))).slice(-2)
+
+                    var stopWatchTimeJson={timepassed:timepassed,milliseconds:milliseconds}
+
+                    parseInt(secondstext)>0?stopWatchTimeJson.seconds = secondstext : ''
+                    parseInt(minutestext)>0?stopWatchTimeJson.minutes = minutestext : ''
+                    parseInt(hourstext)>0?stopWatchTimeJson.hours = hourstext : ''
+                    parseInt(daystext)>0?stopWatchTimeJson.days = daystext : ''
+                    parseInt(monthstext)>0?stopWatchTimeJson.months = monthstext : ''
                 
-                    setstopWatchTime({timepassed:timepassed,milliseconds:milliseconds,seconds:secondstext,minutes:minutestext,hours:hourstext,days:daystext,months:monthstext,years:yearstext});
+                    setstopWatchTime(stopWatchTimeJson);
         },100)
         }
         return () => clearInterval(intervalID);
@@ -83,7 +103,6 @@ function StopWatch(){
 
     function start(){
         setstopWatchInfo({started:true})
-
     }
 
     function pause(){
@@ -91,17 +110,26 @@ function StopWatch(){
             setstopWatchInfo({started:false})
         }
     }
-    function reset(){
-        if(stopWatchInfo.started){
+    function handletaskname(e){
+        var name = e.target.value
+        setstopWatchName(name)
+    }
+    function save(){
             setstopWatchInfo({started:false})
             setstopWatchStartTime(0)
             setstopWatchPauseTime(0)
-            var logsCopy = stopWatchLog
-            logsCopy.push(stopWatchTime)
-            setstopWatchLog(logsCopy)
-            console.log(logsCopy)
+            var infoToBeSaved = stopWatchTime
+            infoToBeSaved.name = stopWatchName
+            props.addLog(infoToBeSaved)
             setstopWatchTime({timepassed:0,milliseconds:0,seconds:0,minutes:0,hours:0,days:0,months:0,years:0})
-        }
+            setstopWatchName('')    
+    }
+    function reset(){
+            setstopWatchName('')    
+            setstopWatchInfo({started:false})
+            setstopWatchStartTime(0)
+            setstopWatchPauseTime(0)
+            setstopWatchTime({timepassed:0,milliseconds:0,seconds:0,minutes:0,hours:0,days:0,months:0,years:0})
     }
 
     return(
@@ -112,24 +140,51 @@ function StopWatch(){
             <React.Fragment>
                 <button onClick={pause}>pause</button>
                 <button onClick={reset}>reset</button>
+                <button onClick={save}>save</button>
             </React.Fragment>
              :
-             <button onClick={start}>start</button>}
+             stopWatchTime.timepassed > 1 ?
+                <React.Fragment>
+                    <button onClick={start}>Resume</button>
+                    <button onClick={reset}>reset</button>
+                    <button onClick={save}>save</button>
+                </React.Fragment>
+            :
+                <form onSubmit={start}>
+                <input onChange={handletaskname} type="text" placeholder="enter task name"/>
+                <button type='submit' >start</button>
+                </form>
+            }
+
+
+            <div className='stop-watch-name-display'>
+
+            {stopWatchName.length>0?stopWatchName:'untitled'}
+
+            </div>
+
 
             <div className='stop-watch-time-display'>
 
                 {stopWatchTime.hours > 0 + ':' ? stopWatchTime.hours : ''}  {stopWatchTime.minutes > 0 ? stopWatchTime.minutes : '00'} : {stopWatchTime.seconds > 0 ? stopWatchTime.seconds : '00'} . {stopWatchTime.milliseconds || 0}
                
             </div>
-            <div className='stop-watch-time-logs'>
-            <ul>
-                {stopWatchLog.map((log,index)=>
-                  
-                        <li key={index}> {log.days?log.days+':':''}{log.hours?log.hours+':':''}{log.minutes?log.minutes+':':''}{log.seconds?log.seconds+'.':''}{log.seconds?log.milliseconds:''}</li>
-                
-                )}
-            </ul>
-            </div>
+
+        </div>
+    )
+}
+
+function StopWatchLogsDisplay(props){
+
+    return(
+        <div className='stop-watch-logs'>
+        <ul>
+            {props.stopWatchLogs != [] ? props.stopWatchLogs.map((log,index)=>
+            
+                    <li key={index}><span>{log.name.length>0?log.name:'untitled'}</span> {log.days?log.days+':':''}{log.hours?log.hours+':':''}{log.minutes?log.minutes+':':'00:'}{log.seconds?log.seconds+'.':'00:'}{log.milliseconds?log.milliseconds:''}</li>
+            
+            ) : ''}
+        </ul>
         </div>
     )
 }
