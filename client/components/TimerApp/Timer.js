@@ -24,10 +24,57 @@ export default function Timer() {
 function TimerDisplay(props) {
     const [timeLeft, settimeLeft] = useState(0);
     const [timeinformat, settimeinformat] = useState({ seconds: '00', minutes: '00', hours: '00' });
+    const [timerStatus, settimerStatus] = useState({ started: false });
+    const [timerInfo, settimerInfo] = useState({});
+    const [timeSet, settimeSet] = useState(0);
+    const [pausedTime, setpausedTime] = useState(0);
+
+    useEffect(() => {
+        const endingTime = timeSet + Date.now() + pausedTime;
+        console.log(Date.now(), timeSet, endingTime);
+
+        if (timerStatus.started) {
+
+            var intervalID = setInterval(() => {
+                var remainingTimeInMillliSeconds = endingTime - Date.now();
+                var remainingTime = remainingTimeInMillliSeconds.toString().slice(0, -3);
+
+                var minutes = Math.trunc(remainingTime / 60);
+                var hours = Math.trunc(minutes / 60);
+                var seconds = remainingTime > 60 ? Math.trunc(remainingTime % 60) : remainingTime;
+
+                console.log(minutes);
+
+                var secondstext = ('0' + seconds).slice(-2);
+                var minutestext = ('0' + Math.trunc(minutes - Math.trunc(hours) * 60)).slice(-2);
+                // var hourstext = 0 || ('0'+(Math.trunc(hours-(Math.trunc(days)*24)))).slice(-2)
+
+                // console.log(hours,minutes,seconds)
+                settimeinformat({ seconds: secondstext, minutes: minutestext, hours: hours });
+            }, 1000);
+        }
+
+        return () => clearInterval(intervalID);
+    }, [timerStatus]);
 
     useEffect(() => {
         settimeinformat(props.time);
-    });
+        var totalSeconds = parseInt(parseInt(props.time.hours) * 3600 + parseInt(props.time.minutes) * 60 + parseInt(props.time.seconds) + '000');
+        settimeSet(totalSeconds);
+    }, [props.time]);
+
+    function start() {
+        settimerStatus({ started: true });
+        console.log('start');
+    }
+    function pause() {
+        settimerStatus({ started: false });
+        console.log('pause');
+    }
+    function reset() {
+        settimerStatus({ started: false });
+        console.log('reset');
+    }
 
     return React.createElement(
         'div',
@@ -35,7 +82,7 @@ function TimerDisplay(props) {
         React.createElement(
             'span',
             null,
-            timeinformat.hours > 1 ? timeinformat.hours + ':' : ''
+            timeinformat.hours + ':'
         ),
         React.createElement(
             'span',
@@ -46,6 +93,11 @@ function TimerDisplay(props) {
             'span',
             null,
             timeinformat.seconds
+        ),
+        React.createElement(
+            'button',
+            { type: 'button', onClick: start },
+            'start'
         )
     );
 }

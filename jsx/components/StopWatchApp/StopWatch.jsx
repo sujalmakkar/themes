@@ -20,7 +20,7 @@ export default function StopWatch(props){
         var secondstext = '', minutestext ='' , hourstext = '', daystext = '' , monthstext = '', yearstext = '' ;
         if(stopWatchInfo.started ){
         var intervalID = setInterval(()=>{
-                    timepassed = Date.now()-stopWatchStartTime - stopWatchPauseTime
+                    timepassed = Date.now() - stopWatchStartTime - stopWatchPauseTime
                     
                     timepassedstring = timepassed.toString()
                     
