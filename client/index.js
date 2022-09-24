@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import TodoApp from './Todo';
-import StopWatchApp from './StopWatch';
+import TodoApp from './components/TodoApp/TodoApp';
+import StopWatchApp from './components/StopWatchApp/StopWatchApp';
 
 class App extends React.Component {
     render() {

@@ -1,33 +1,6 @@
 import React ,{useState,useEffect} from 'react'
 
-
-class StopWatchApp extends React.Component {
-    constructor(props){
-        super(props)
-        this.state = {logs:[]}
-        this.addLog = this.addLog.bind(this)
-    }
-    addLog(info){
-        var logscopy = this.state.logs
-        logscopy.push(info)
-        this.setState({logs:logscopy})
-    }
-    render(){
-        return(
-            <React.StrictMode>
-            <div>
-                This is a Timer App
-                <StopWatch addLog = {this.addLog}/>
-                <StopWatch addLog = {this.addLog}/>
-                <StopWatch addLog = {this.addLog}/>
-                <StopWatchLogsDisplay stopWatchLogs={this.state.logs}/>
-            </div>
-            </React.StrictMode>
-        )
-    }
-}
-
-function StopWatch(props){
+export default function StopWatch(props){
 
     const [stopWatchName,setstopWatchName] = useState('')
     const [stopWatchTime,setstopWatchTime] = useState({timepassed:0,milliseconds:0,seconds:0,minutes:0,hours:0,days:0,months:0,years:0})
@@ -173,27 +146,3 @@ function StopWatch(props){
         </div>
     )
 }
-
-function StopWatchLogsDisplay(props){
-
-    return(
-        <div className='stop-watch-logs'>
-        <ul>
-            {props.stopWatchLogs != [] ? props.stopWatchLogs.map((log,index)=>
-            
-                    <li key={index}><span>{log.name.length>0?log.name:'untitled'}</span> {log.days?log.days+':':''}{log.hours?log.hours+':':''}{log.minutes?log.minutes+':':'00:'}{log.seconds?log.seconds+'.':'00:'}{log.milliseconds?log.milliseconds:''}</li>
-            
-            ) : ''}
-        </ul>
-        </div>
-    )
-}
-
-
-function Timer(){
-
-}
-
-
-
-export default StopWatchApp
