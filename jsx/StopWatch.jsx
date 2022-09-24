@@ -1,7 +1,7 @@
 import React ,{useState,useEffect} from 'react'
 
 
-class TimerApp extends React.Component {
+class StopWatchApp extends React.Component {
     constructor(props){
         super(props)
         this.state = {logs:[]}
@@ -196,4 +196,4 @@ function Timer(){
 
 
 
-export default TimerApp
+export default StopWatchApp
