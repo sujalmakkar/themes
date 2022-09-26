@@ -9,7 +9,7 @@ export default function StopWatchLogsDisplay(props) {
             null,
             props.stopWatchLogs != [] ? props.stopWatchLogs.map((log, index) => React.createElement(
                 'li',
-                { key: index },
+                { className: 'stop-watch-log', key: index },
                 React.createElement(
                     'span',
                     null,

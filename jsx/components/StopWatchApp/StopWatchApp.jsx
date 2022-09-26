@@ -18,7 +18,13 @@ class StopWatchApp extends React.Component {
         return(
             <React.StrictMode>
             <div>
-                This is a Timer App
+                This is a STOP WATCH App
+                <StopWatch addLog = {this.addLog}/>
+                <StopWatch addLog = {this.addLog}/>
+                <StopWatch addLog = {this.addLog}/>
+                <StopWatch addLog = {this.addLog}/>
+                <StopWatch addLog = {this.addLog}/>
+                <StopWatch addLog = {this.addLog}/>
                 <StopWatch addLog = {this.addLog}/>
                 <StopWatch addLog = {this.addLog}/>
                 <StopWatch addLog = {this.addLog}/>

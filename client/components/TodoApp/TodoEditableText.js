@@ -27,7 +27,7 @@ export default function TodoEditableText(props) {
 
     return React.createElement(
         'span',
-        { className: `todo-text ${Editable ? 'editable' : ''}  ${props.todoDone ? 'done' : ''}`, 'data-id': props.todoId, onKeyDown: handleEditDone, contentEditable: Editable ? 'true' : 'false', onBlur: handleBlur, onDoubleClick: handleEdit },
+        { suppressContentEditableWarning: 'true', className: `todo-text ${Editable ? 'editable' : ''}  ${props.todoDone ? 'done' : ''}`, 'data-id': props.todoId, onKeyDown: handleEditDone, contentEditable: Editable ? 'true' : 'false', onBlur: handleBlur, onDoubleClick: handleEdit },
         props.todoText
     );
 }

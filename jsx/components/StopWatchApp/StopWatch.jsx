@@ -4,54 +4,55 @@ export default function StopWatch(props){
 
     const [stopWatchName,setstopWatchName] = useState('')
     const [stopWatchTime,setstopWatchTime] = useState({timepassed:0,milliseconds:0,seconds:0,minutes:0,hours:0,days:0,months:0,years:0})
-    const [stopWatchInfo,setstopWatchInfo] = useState({started:false})
+    const [stopWatchInfo,setstopWatchInfo] = useState({started:false,initiated:false})
     const [stopWatchStartTime,setstopWatchStartTime] = useState(0)
     const [stopWatchPauseTime,setstopWatchPauseTime] = useState(0)
 
-
     useEffect(() => {
-        var started = Date.now()
+        if(stopWatchInfo.initiated){
+            var started = Date.now()
 
-        if(stopWatchStartTime==0){
-            setstopWatchStartTime(started)
+            if(stopWatchStartTime==0){
+                setstopWatchStartTime(started)
+            }
+    
+            var totalsecondspassed = 0,timepassedstring = 0,timepassed = 0,milliseconds = 0,seconds = 0,minutes = 0,hours = 0,days = 0,months= 0,years = 0 
+            var secondstext = '', minutestext ='' , hourstext = '', daystext = '' , monthstext = '', yearstext = '' ;
+            if(stopWatchInfo.started ){
+            var intervalID = setInterval(()=>{
+                        timepassed = Date.now() - stopWatchStartTime - stopWatchPauseTime
+                        
+                        timepassedstring = timepassed.toString()
+                        
+                        milliseconds = timepassedstring.slice(-3,-2); 
+            
+                        totalsecondspassed = timepassedstring.slice(0,-3)
+            
+                        seconds = totalsecondspassed%60
+                        minutes = totalsecondspassed/60
+                        hours = minutes/60
+                        days = hours/24
+                        months = days/30
+                        years = months/12
+            
+                        secondstext = (('0'+seconds)).slice(-2)
+                        minutestext = ('0'+(Math.trunc(minutes-(Math.trunc(hours)*60)))).slice(-2)
+                        hourstext = ('0'+(Math.trunc(hours-(Math.trunc(days)*24)))).slice(-2)
+                        daystext = ('0'+(Math.trunc(days-(Math.trunc(months)*24)))).slice(-2)
+                        monthstext = ('0'+(Math.trunc(months-(Math.trunc(years)*24)))).slice(-2)
+                        yearstext = ('0'+(Math.trunc(months/12))).slice(-2)
+    
+                        var stopWatchTimeJson={timepassed:timepassed,milliseconds:milliseconds}
+    
+                        parseInt(secondstext)>0?stopWatchTimeJson.seconds = secondstext : ''
+                        parseInt(minutestext)>0?stopWatchTimeJson.minutes = minutestext : ''
+                        parseInt(hourstext)>0?stopWatchTimeJson.hours = hourstext : ''
+                        parseInt(daystext)>0?stopWatchTimeJson.days = daystext : ''
+                        parseInt(monthstext)>0?stopWatchTimeJson.months = monthstext : ''
+                    
+                        setstopWatchTime(stopWatchTimeJson);
+            },100)
         }
-
-        var totalsecondspassed = 0,timepassedstring = 0,timepassed = 0,milliseconds = 0,seconds = 0,minutes = 0,hours = 0,days = 0,months= 0,years = 0 
-        var secondstext = '', minutestext ='' , hourstext = '', daystext = '' , monthstext = '', yearstext = '' ;
-        if(stopWatchInfo.started ){
-        var intervalID = setInterval(()=>{
-                    timepassed = Date.now() - stopWatchStartTime - stopWatchPauseTime
-                    
-                    timepassedstring = timepassed.toString()
-                    
-                    milliseconds = timepassedstring.slice(-3,-2); 
-        
-                    totalsecondspassed = timepassedstring.slice(0,-3)
-        
-                    seconds = totalsecondspassed%60
-                    minutes = totalsecondspassed/60
-                    hours = minutes/60
-                    days = hours/24
-                    months = days/30
-                    years = months/12
-        
-                    secondstext = (('0'+seconds)).slice(-2)
-                    minutestext = ('0'+(Math.trunc(minutes-(Math.trunc(hours)*60)))).slice(-2)
-                    hourstext = ('0'+(Math.trunc(hours-(Math.trunc(days)*24)))).slice(-2)
-                    daystext = ('0'+(Math.trunc(days-(Math.trunc(months)*24)))).slice(-2)
-                    monthstext = ('0'+(Math.trunc(months-(Math.trunc(years)*24)))).slice(-2)
-                    yearstext = ('0'+(Math.trunc(months/12))).slice(-2)
-
-                    var stopWatchTimeJson={timepassed:timepassed,milliseconds:milliseconds}
-
-                    parseInt(secondstext)>0?stopWatchTimeJson.seconds = secondstext : ''
-                    parseInt(minutestext)>0?stopWatchTimeJson.minutes = minutestext : ''
-                    parseInt(hourstext)>0?stopWatchTimeJson.hours = hourstext : ''
-                    parseInt(daystext)>0?stopWatchTimeJson.days = daystext : ''
-                    parseInt(monthstext)>0?stopWatchTimeJson.months = monthstext : ''
-                
-                    setstopWatchTime(stopWatchTimeJson);
-        },100)
         }
         return () => clearInterval(intervalID);
     
@@ -59,13 +60,12 @@ export default function StopWatch(props){
 
 
     useEffect(() => {
-
-        if(!stopWatchInfo.started){
+        if(!stopWatchInfo.started && stopWatchInfo.initiated){
             var sleeptimestarted = Date.now(); 
-        var intervalID = setInterval(()=>{
-            var totalsleeptime = Date.now() - sleeptimestarted 
-            setstopWatchPauseTime(stopWatchPauseTime+totalsleeptime)
-        },100)
+            var intervalID = setInterval(()=>{
+                var totalsleeptime = Date.now() - sleeptimestarted 
+                setstopWatchPauseTime(stopWatchPauseTime+totalsleeptime)
+            },100)
         }
         return () => clearInterval(intervalID)
     
@@ -75,12 +75,12 @@ export default function StopWatch(props){
 
 
     function start(){
-        setstopWatchInfo({started:true})
+        setstopWatchInfo({started:true,initiated:true})
     }
 
     function pause(){
         if(stopWatchInfo.started){
-            setstopWatchInfo({started:false})
+            setstopWatchInfo({started:false,initiated:true})
         }
     }
     function handletaskname(e){
@@ -88,7 +88,7 @@ export default function StopWatch(props){
         setstopWatchName(name)
     }
     function save(){
-            setstopWatchInfo({started:false})
+            setstopWatchInfo({started:false,initiated:false})
             setstopWatchStartTime(0)
             setstopWatchPauseTime(0)
             var infoToBeSaved = stopWatchTime
@@ -99,7 +99,7 @@ export default function StopWatch(props){
     }
     function reset(){
             setstopWatchName('')    
-            setstopWatchInfo({started:false})
+            setstopWatchInfo({started:false,initiated:false})
             setstopWatchStartTime(0)
             setstopWatchPauseTime(0)
             setstopWatchTime({timepassed:0,milliseconds:0,seconds:0,minutes:0,hours:0,days:0,months:0,years:0})
