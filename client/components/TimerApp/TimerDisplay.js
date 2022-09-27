@@ -78,6 +78,21 @@ export default function TimerDisplay(props) {
         playsong();
         setstopAlarm(true);
         console.log('alarm');
+        const fetch = require('node-fetch');
+
+        const url = 'https://anonmyous-mail-sender.p.rapidapi.com/send';
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+                'X-RapidAPI-Key': '7349c17b6cmsh86192b0018ab7fep121bf1jsndd4aaf1a450b',
+                'X-RapidAPI-Host': 'anonmyous-mail-sender.p.rapidapi.com'
+            },
+            body: '{"to":"sujalmakkar1111@gmail.com","subject":"good new is its working","text":"bad news is you wasted a day when there was no need"}'
+        };
+
+        fetch(url, options).then(res => res.json()).then(json => console.log(json)).catch(err => console.error('error:' + err));
     }
     function playsong() {
         song.play();
