@@ -36,9 +36,8 @@ export default function TimerDisplay(props){
                 minutestext = ('0'+(Math.trunc(minutes-(Math.trunc(hours)*60)))).slice(-2)
                 settimeinformat({seconds:secondstext,minutes:minutestext,hours:hours})
                 if(remainingTime < 0){
-                console.log('work2')
+                    console.log('work2')
                     alarm()
-                    reset()
                 } 
             },900)            
         }
@@ -71,6 +70,7 @@ export default function TimerDisplay(props){
     function alarm(){
         settimerStatus({started:false,initialized:false})
         settimeLeft(0)
+        settimeinformat({hours:'00',minutes:'00',seconds:'00'})
         playsong()
         setstopAlarm(true)
         console.log('alarm')
