@@ -1,9 +1,9 @@
 import React from 'react'
-import StopWatchLogsDisplay from './StopWatchDisplay'
-import StopWatch from './StopWatch'
+// import StopWatchLogsDisplay from './StopWatchDisplay'
+import Notes from './Notes'
 
 
-class StopWatchApp extends React.Component {
+class NotesApp extends React.Component {
     constructor(props){
         super(props)
         this.state = {logs:[]}
@@ -18,9 +18,10 @@ class StopWatchApp extends React.Component {
         return(
             <React.StrictMode>
             <div>
-                This is a STOP WATCH App
-                <StopWatch addLog = {this.addLog}/>
-                <StopWatchLogsDisplay stopWatchLogs={this.state.logs}/>
+                Notes App
+                
+                <Notes onClick={this.openEditor}/>
+                <Notes onClick={this.openEditor}/>
             </div>
             </React.StrictMode>
         )
@@ -30,4 +31,4 @@ class StopWatchApp extends React.Component {
 
 
 
-export default StopWatchApp
+export default NotesApp

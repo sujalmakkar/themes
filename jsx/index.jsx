@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import TodoApp from './components/TodoApp/TodoApp'
 import StopWatchApp from './components/StopWatchApp/StopWatchApp'
 import TimerApp from './components/TimerApp/TimerApp'
+import NotesApp from './components/NotesApp/NotesApp'
 
 class App extends React.Component {
     render(){
@@ -11,8 +12,9 @@ class App extends React.Component {
             <div>
                 hey there
                 <TodoApp/>
-                <StopWatchApp/>
-                <TimerApp/>
+                {/* <StopWatchApp/> */}
+                {/* <TimerApp/> */}
+                <NotesApp/>
             </div>
             </React.StrictMode>
         )

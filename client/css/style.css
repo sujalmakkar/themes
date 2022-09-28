@@ -30,3 +30,25 @@ body{
     color:#645CAA;
 }
 /* EBC7E8 , BFACE0 , A084CA , 645CAA */
+
+.note-container{
+    border:1px solid black;
+    margin:20px;
+    padding:20px;
+}
+.note .text-container{
+    padding:5px;
+    margin:5px;
+}
+
+.note{
+    display:none;
+}
+.note.popup{
+    display:block;
+}
+
+.note-list-container{
+    padding:10px;
+    margin:10px;
+}

@@ -24,7 +24,7 @@ export default function TimerDisplay(props) {
             minutestext = '';
         if (timerStatus.started) {
 
-            if (timeLeft <= 0) {
+            if (timeLeft < 1) {
                 console.log('work');
                 alarm();
             }
@@ -40,7 +40,7 @@ export default function TimerDisplay(props) {
                 secondstext = ('0' + seconds).slice(-2);
                 minutestext = ('0' + Math.trunc(minutes - Math.trunc(hours) * 60)).slice(-2);
                 settimeinformat({ seconds: secondstext, minutes: minutestext, hours: hours });
-                if (remainingTime < 0) {
+                if (remainingTime < 1) {
                     console.log('work2');
                     alarm();
                 }

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import TodoApp from './components/TodoApp/TodoApp';
 import StopWatchApp from './components/StopWatchApp/StopWatchApp';
 import TimerApp from './components/TimerApp/TimerApp';
+import NotesApp from './components/NotesApp/NotesApp';
 
 class App extends React.Component {
     render() {
@@ -14,8 +15,7 @@ class App extends React.Component {
                 null,
                 'hey there',
                 React.createElement(TodoApp, null),
-                React.createElement(StopWatchApp, null),
-                React.createElement(TimerApp, null)
+                React.createElement(NotesApp, null)
             )
         );
     }

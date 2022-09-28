@@ -1,8 +1,8 @@
 import React from 'react';
-import StopWatchLogsDisplay from './StopWatchDisplay';
-import StopWatch from './StopWatch';
+// import StopWatchLogsDisplay from './StopWatchDisplay'
+import Notes from './Notes';
 
-class StopWatchApp extends React.Component {
+class NotesApp extends React.Component {
     constructor(props) {
         super(props);
         this.state = { logs: [] };
@@ -20,12 +20,12 @@ class StopWatchApp extends React.Component {
             React.createElement(
                 'div',
                 null,
-                'This is a STOP WATCH App',
-                React.createElement(StopWatch, { addLog: this.addLog }),
-                React.createElement(StopWatchLogsDisplay, { stopWatchLogs: this.state.logs })
+                'Notes App',
+                React.createElement(Notes, { onClick: this.openEditor }),
+                React.createElement(Notes, { onClick: this.openEditor })
             )
         );
     }
 }
 
-export default StopWatchApp;
+export default NotesApp;
