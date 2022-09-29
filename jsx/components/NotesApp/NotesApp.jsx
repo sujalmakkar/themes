@@ -1,5 +1,5 @@
 import React from 'react'
-import Notes from './Notes'
+import NotesContainer from './NotesContainer'
 
 
 class NotesApp extends React.Component {
@@ -19,8 +19,8 @@ class NotesApp extends React.Component {
             <div>
                 Notes App
                 
-                <Notes onClick={this.openEditor}/>
-                <Notes onClick={this.openEditor}/>
+                <NotesContainer onClick={this.openEditor}/>
+                <NotesContainer onClick={this.openEditor}/>
             </div>
             </React.StrictMode>
         )

@@ -1,5 +1,5 @@
 import React from 'react';
-import Notes from './Notes';
+import NotesContainer from './NotesContainer';
 
 class NotesApp extends React.Component {
     constructor(props) {
@@ -20,8 +20,8 @@ class NotesApp extends React.Component {
                 'div',
                 null,
                 'Notes App',
-                React.createElement(Notes, { onClick: this.openEditor }),
-                React.createElement(Notes, { onClick: this.openEditor })
+                React.createElement(NotesContainer, { onClick: this.openEditor }),
+                React.createElement(NotesContainer, { onClick: this.openEditor })
             )
         );
     }

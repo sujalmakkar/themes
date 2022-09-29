@@ -52,3 +52,7 @@ body{
     padding:10px;
     margin:10px;
 }
+
+.note .note-heading{
+    font-size:30px;
+}

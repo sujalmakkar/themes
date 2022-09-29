@@ -1,71 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-// function Note(props){
-
-//     const [demodata,setdemodata] = useState({heading:'Heading here!',content:'content here!'})
-
-//     const [headingdata,setheadingdata] = useState('')
-//     const [contentdata,setcontentdata] = useState('')
-//     const [addList,setaddList] = useState(false)
-
-//     var Heading = null ;
-//     function headingref(e){
-//         Heading = e
-//     }
-
-//     var Content = null ;
-//     function contentref(e){
-//         Content = e
-//     }
-
-
-//     function HandleContent(e){
-//         setcontentdata(e.target.innerHTML)
-//     }
-
-//     function handleHeading(e){
-//         setheadingdata(e.target.innerHTML)
-
-//         if(addList){
-//             console.log(true)
-//         }
-//     }
-//     function setAddList(){
-//         setaddList(!addList)
-//     }
-//     useEffect(()=>{
-//         console.log('rerender')
-
-//     },[addList])
-
-//     useEffect(()=>{
-//         Heading.innerHTML= headingdata != '' ? headingdata : demodata.heading
-//         Content.innerHTML= contentdata != '' ? contentdata : demodata.content
-//     },[])
-
-
-//     return(
-//         <div  className={props.popup ? 'note popup' : 'note'} data-id={props.id} onBlur={props.flur}>
-
-//             <div className='note-text-container'>
-//             <div className="note-heading text-container" ref={headingref} data-id={props.id} suppressContentEditableWarning='true' contentEditable="true" aria-multiline="true" role="textbox" onKeyDown={handleHeading}></div>
-
-//             <div className="note-content text-container" ref={contentref} data-id={props.id} suppressContentEditableWarning='true' contentEditable="true" aria-multiline="true" role="textbox" onKeyDown={HandleContent}></div>
-//             </div>
-
-
-//             <div className='note-tools-container'>
-//                 <div className='note-tool' onClick={setAddList}>
-//                     <button> set add list to true</button>
-//                 </div>
-//             </div>
-
-
-//         </div>
-//     )
-// }
-
-
 export default function Note(props) {
 
     const [demodata, setdemodata] = useState({ heading: 'Heading here!', content: 'content here!' });
@@ -90,10 +24,6 @@ export default function Note(props) {
 
     function handleHeading(e) {
         setheadingdata(e.target.innerHTML);
-
-        if (addList) {
-            console.log(true);
-        }
     }
 
     useEffect(() => {
@@ -128,14 +58,37 @@ export default function Note(props) {
         }
     }
 
+    function addHeading() {
+        if (currentplace === 'content') {
+            Content.innerHTML = contentdata + `<h2 class="heading">Note Heading</h2>`;
+        } else if (currentplace === 'heading') {
+            Heading.innerHTML = headingdata + `<h2 class="heading">Note Heading</h2>`;
+        }
+    }
+    function getSelectionText() {
+        if (window.getSelection) {
+            var text = window.getSelection();
+            console.log(text.className);
+            // if(text!='')
+            console.log(text.focusNode);
+        }
+        // console.log(text);
+    }
+    getSelectionText();
+
+    // document.onmouseup = document.onkeyup = document.onselectionchange = function() {
+    //   document.getElementById("sel").value = getSelectionText();
+    // };
+
+
     return React.createElement(
         'div',
         { className: props.popup ? 'note popup' : 'note', 'data-id': props.id },
         React.createElement(
             'div',
             { className: 'note-text-container', onKeyDown: handlenote, onClick: handlenote },
-            React.createElement('div', { className: 'note-heading text-container', ref: headingref, 'data-name': 'heading', 'data-id': props.id, suppressContentEditableWarning: 'true', contentEditable: 'true', 'aria-multiline': 'true', role: 'textbox', onKeyDown: handleHeading }),
-            React.createElement('div', { className: 'note-content text-container', ref: contentref, 'data-name': 'content', 'data-id': props.id, suppressContentEditableWarning: 'true', contentEditable: 'true', 'aria-multiline': 'true', role: 'textbox', onKeyDown: HandleContent })
+            React.createElement('div', { className: 'note-heading text-container', ref: headingref, 'data-name': 'heading', 'data-id': props.id, suppressContentEditableWarning: 'true', contentEditable: 'true', 'aria-multiline': 'true', role: 'textbox', onKeyDown: handleHeading, onClick: handleHeading }),
+            React.createElement('div', { className: 'note-content text-container', ref: contentref, 'data-name': 'content', 'data-id': props.id, suppressContentEditableWarning: 'true', contentEditable: 'true', 'aria-multiline': 'true', role: 'textbox', onKeyDown: HandleContent, onClick: HandleContent })
         ),
         React.createElement(
             'div',
@@ -152,6 +105,15 @@ export default function Note(props) {
                     'button',
                     { type: 'button', onClick: addlist },
                     'Add list'
+                )
+            ),
+            React.createElement(
+                'div',
+                { className: 'note-tool' },
+                React.createElement(
+                    'button',
+                    { type: 'button', onClick: addHeading },
+                    'Add Heading'
                 )
             )
         )

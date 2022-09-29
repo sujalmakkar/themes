@@ -1,4 +1,5 @@
 import React from 'react'
+import MusicAppComponentsContainer from './MusicAppComponentsContainer'
 
 class MusicApp extends React.Component{
     constructor(props){
@@ -7,8 +8,10 @@ class MusicApp extends React.Component{
     render() {
         return(
             <div id="MusicApp">
-
+                <MusicAppComponentsContainer/>
             </div>
             )
     }
 }
+
+export default MusicApp
