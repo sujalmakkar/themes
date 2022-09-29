@@ -1,5 +1,4 @@
 import React from 'react'
-// import StopWatchLogsDisplay from './StopWatchDisplay'
 import Notes from './Notes'
 
 
