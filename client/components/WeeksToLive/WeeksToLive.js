@@ -24,6 +24,8 @@ class WeeksToLive extends React.Component {
 
         var weeksToLive = Math.round(dayspassed < 0 ? dayspassed * -1 / 7 : dayspassed / 7);
         this.setState({ weeksToLive: weeksToLive });
+
+        console.log(todayDate);
     }
 
     render() {

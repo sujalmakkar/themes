@@ -6,18 +6,16 @@ import TimerApp from './components/TimerApp/TimerApp';
 import NotesApp from './components/NotesApp/NotesApp';
 import WeeksToLive from './components/WeeksToLive/WeeksToLive';
 import MusicApp from './components/MusicApp/MusicApp';
+import DeadLineApp from './components/DeadLineApp/DeadLineApp';
+import FutureLetterApp from './components/FutureLetterApp/FutureLetterApp';
+import GoalsApp from './components/GoalsApp/GoalsApp';
 
 class App extends React.Component {
     render() {
         return React.createElement(
-            React.StrictMode,
+            'div',
             null,
-            React.createElement(
-                'div',
-                null,
-                'hey there',
-                React.createElement(TodoApp, null)
-            )
+            React.createElement(TimerApp, null)
         );
     }
 }

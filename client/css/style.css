@@ -44,8 +44,8 @@ body{
 
 .week{
     width:1.140vw;
-    height:1.140vw;
-    background:#101010;
+    height:12px;
+    border:1px solid #101010;
     display: inline-flex;
     margin: auto;
 }
@@ -60,7 +60,7 @@ body{
 }
 
 .lived{
-    background: #327383;
+    background: #101010;
 }
 
 
@@ -103,4 +103,8 @@ body{
 
 .note .note-heading{
     font-size:30px;
+}
+
+.future-letter-input-div{
+    border:1px solid #101010;
 }
