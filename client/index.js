@@ -16,9 +16,7 @@ class App extends React.Component {
                 'div',
                 null,
                 'hey there',
-                React.createElement(TodoApp, null),
-                React.createElement(NotesApp, null),
-                React.createElement(WeeksToLive, null)
+                React.createElement(TodoApp, null)
             )
         );
     }

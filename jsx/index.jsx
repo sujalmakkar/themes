@@ -16,8 +16,8 @@ class App extends React.Component {
                 <TodoApp/>
                 {/* <StopWatchApp/> */}
                 {/* <TimerApp/> */}
-                <NotesApp/>
-                <WeeksToLive/>
+                {/* <NotesApp/> */}
+                {/* <WeeksToLive/> */}
                 {/* <MusicApp/> */}
             </div>
             </React.StrictMode>

@@ -41,6 +41,54 @@ body{
     margin:5px;
 }
 
+
+.week{
+    width:1.140vw;
+    height:1.140vw;
+    background:#101010;
+    display: inline-flex;
+    margin: auto;
+}
+.year{
+    width: 70%;
+    overflow: hidden;
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;  
+    margin-bottom:1.5px;
+}
+
+.lived{
+    background: #327383;
+}
+
+
+.hovered-week-info.hidden{
+    display: none;
+}
+
+.hovered-week-info{
+    position:absolute;
+    background:#f0f0f0;
+    transition: all .1s ease;
+    z-index:2;
+    right:0;
+    top:50%;
+    transform: translate(0%,-50%);
+    display: block;
+    position: fixed;
+}
+
+.weeks-container{
+    width: 100%;
+    overflow: hidden;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
 .note{
     display:none;
 }

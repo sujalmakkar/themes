@@ -14,7 +14,7 @@ export default function WeeksToLiveForm(props) {
     return React.createElement(
         'form',
         { onSubmit: setDob },
-        React.createElement('input', { ref: inputref, type: 'date', name: 'date' }),
+        React.createElement('input', { ref: inputref, type: 'date', name: 'date', required: true }),
         React.createElement(
             'button',
             { type: 'submit' },

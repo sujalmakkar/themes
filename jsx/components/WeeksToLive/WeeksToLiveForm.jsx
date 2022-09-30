@@ -13,7 +13,7 @@ export default function WeeksToLiveForm(props){
     })
     return(
         <form onSubmit={setDob}>
-        <input ref={inputref} type="date" name="date"/>
+        <input ref={inputref} type="date" name="date" required/>
         <button type="submit">Submit</button>
         </form>
         )
