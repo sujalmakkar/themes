@@ -19,11 +19,11 @@ export default function FutureLetterAppForm(props){
     return(
         <div className="future-letter-app-form">
             <form onSubmit={newFutureMail}>
-            <div className="future-letter-subject-div" onKeyDown={handleSubject} placeholder="Subject" contentEditable="true" suppressContentEditableWarning="true">
+            <div className="future-letter-subject-div" onKeyDown={handleSubject} onKeyUp={handleSubject} placeholder="Subject" contentEditable="true" suppressContentEditableWarning="true">
             
             </div>
 
-            <div className="future-letter-content-div" onKeyDown={handleContent} contentEditable="true" suppressContentEditableWarning="true">
+            <div className="future-letter-content-div" onKeyDown={handleContent} onKeyUp={handleContent} contentEditable="true" suppressContentEditableWarning="true">
             
             </div>
             <button type="submit">Send To The Future</button>

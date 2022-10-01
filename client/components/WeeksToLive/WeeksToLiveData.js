@@ -6,12 +6,19 @@ export default function WeeksToLiveData(props) {
 
     useEffect(() => {
         var allweeks = document.getElementsByClassName('week');
-        for (let i = 0; i < allweeks.length; i++) {
-            allweeks[i].classList.remove('lived');
+        function weeks() {
+            for (let i = 0; i < allweeks.length; i++) {
+                allweeks[i].classList.remove('lived');
+            }
+            for (var i = 0; i < props.weeksToLive; i++) {
+                allweeks[i].classList.add('lived');
+            }
         }
-        for (var i = 0; i < props.weeksToLive; i++) {
-            allweeks[i].classList.add('lived');
-        }
+        weeks();
+
+        setInterval(() => {
+            weeks();
+        }, 10000000);
     }, [props.weeksToLive]);
 
     var weekinfocontent = null;

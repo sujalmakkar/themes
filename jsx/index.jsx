@@ -9,20 +9,22 @@ import MusicApp from './components/MusicApp/MusicApp'
 import DeadLineApp from './components/DeadLineApp/DeadLineApp'
 import FutureLetterApp from './components/FutureLetterApp/FutureLetterApp'
 import GoalsApp from './components/GoalsApp/GoalsApp'
+import RegisterPage from './components/RegisterPage/RegisterPage'
 
 class App extends React.Component {
     render(){
         return(
-            <div>
-                {/* <TodoApp/> */}
-                {/* <StopWatchApp/> */}
+            <div id="App">
+                <RegisterPage/>
+                {/* <TodoApp/>
+                <StopWatchApp/>
                 <TimerApp/>
-                {/* <NotesApp/> */}
-                {/* <WeeksToLive/> */}
-                {/* <DeadLineApp/> */}
-                {/* <FutureLetterApp/> */}
-                {/* <MusicApp/> */}
-                {/* <GoalsApp/> */}
+                <NotesApp/>
+                <WeeksToLive/>
+                <DeadLineApp/>
+                <FutureLetterApp/>
+                <MusicApp/>
+                <GoalsApp/> */}
             </div>
         )
     }

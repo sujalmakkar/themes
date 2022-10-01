@@ -22,8 +22,8 @@ export default function FutureLetterAppForm(props) {
         React.createElement(
             'form',
             { onSubmit: newFutureMail },
-            React.createElement('div', { className: 'future-letter-subject-div', onKeyDown: handleSubject, placeholder: 'Subject', contentEditable: 'true', suppressContentEditableWarning: 'true' }),
-            React.createElement('div', { className: 'future-letter-content-div', onKeyDown: handleContent, contentEditable: 'true', suppressContentEditableWarning: 'true' }),
+            React.createElement('div', { className: 'future-letter-subject-div', onKeyDown: handleSubject, onKeyUp: handleSubject, placeholder: 'Subject', contentEditable: 'true', suppressContentEditableWarning: 'true' }),
+            React.createElement('div', { className: 'future-letter-content-div', onKeyDown: handleContent, onKeyUp: handleContent, contentEditable: 'true', suppressContentEditableWarning: 'true' }),
             React.createElement(
                 'button',
                 { type: 'submit' },

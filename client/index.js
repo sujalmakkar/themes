@@ -9,13 +9,14 @@ import MusicApp from './components/MusicApp/MusicApp';
 import DeadLineApp from './components/DeadLineApp/DeadLineApp';
 import FutureLetterApp from './components/FutureLetterApp/FutureLetterApp';
 import GoalsApp from './components/GoalsApp/GoalsApp';
+import RegisterPage from './components/RegisterPage/RegisterPage';
 
 class App extends React.Component {
     render() {
         return React.createElement(
             'div',
-            null,
-            React.createElement(TimerApp, null)
+            { id: 'App' },
+            React.createElement(RegisterPage, null)
         );
     }
 }
