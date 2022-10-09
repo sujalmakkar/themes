@@ -9,7 +9,7 @@ export default function DeadLineContainer(props) {
     return React.createElement(
         'div',
         { className: 'dead-line-container' },
-        deadLines.map(a => React.createElement(DeadLine, { name: a.name, due: a.due }))
+        deadLines.map(a => React.createElement(DeadLine, { name: a.name, dueTime: a.dueTime, dueDate: a.dueDate, key: a.id }))
     );
 }
 
@@ -21,11 +21,8 @@ function DeadLine(props) {
         getTimeInMinutes();
 
         function getTimeInMinutes() {
-            var dueDateArray = props.due.split('-');
-            var dueDate = new Date(dueDateArray[1] + '/' + dueDateArray[2] + '/' + dueDateArray[0]).getTime();
             var currentTime = Date.now();
-            var timeRemainingInSeconds = parseInt((dueDate + 86400000 - currentTime).toString().slice(0, -3));
-
+            var timeRemainingInSeconds = parseInt((props.dueTime + 86400000 - currentTime).toString().slice(0, -3));
             var minutes = Math.trunc(timeRemainingInSeconds / 60);
             var hours = Math.trunc(minutes / 60);
             var days = Math.trunc(hours / 24);
@@ -51,7 +48,7 @@ function DeadLine(props) {
         React.createElement(
             'div',
             { className: 'dead-line-name' },
-            props.name
+            props.dueDate
         ),
         React.createElement(
             'div',

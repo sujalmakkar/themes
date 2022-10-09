@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 export default function WeeksToLiveData(props) {
 
     const [hoverdata, sethoverdata] = useState({ year: 0, week: 0 });
-    const [weekinfocontentposition, setweekInfoContentPosition] = useState({ x: 0, y: 0 });
 
     useEffect(() => {
         var allweeks = document.getElementsByClassName('week');
@@ -29,7 +28,6 @@ export default function WeeksToLiveData(props) {
     function weekinfoposition(e) {
         weekinfocontent.classList.add('hidden');
         if (e.target.classList[0] == 'week' || e.target.classList[0] == 'weeks-container') {
-            console.log('this should work');
             weekinfocontent.classList.remove('hidden');
         }
     }

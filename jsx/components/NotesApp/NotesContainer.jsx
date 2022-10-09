@@ -5,18 +5,18 @@ export default function NoteContainer(props){
 
     const[open,setopen] = useState(false)
 
-    function handletoggleeditor(e){
-        console.log(e.target.dataset)
-        setopen(!open)
+    function handlecloseeditor(e){
+        console.log(e)
+        setopen(false)
     }
     function handleopeneditor(){
         setopen(true)
     }
 
     return(
-        <div className="note-container" onClick={handleopeneditor}  data-id="364234">
+        <div className="note-container" onClick={handleopeneditor}  data-id={props.id}>
             <div className='note-preview'>
-            <Note id="364234" onBlur={handletoggleeditor} popup={open}/> 
+            <Note id={props.id} popup={open}/> 
             </div>
         </div>
     )

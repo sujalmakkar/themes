@@ -5,9 +5,9 @@ export default function NoteContainer(props) {
 
     const [open, setopen] = useState(false);
 
-    function handletoggleeditor(e) {
-        console.log(e.target.dataset);
-        setopen(!open);
+    function handlecloseeditor(e) {
+        console.log(e);
+        setopen(false);
     }
     function handleopeneditor() {
         setopen(true);
@@ -15,11 +15,11 @@ export default function NoteContainer(props) {
 
     return React.createElement(
         'div',
-        { className: 'note-container', onClick: handleopeneditor, 'data-id': '364234' },
+        { className: 'note-container', onClick: handleopeneditor, 'data-id': props.id },
         React.createElement(
             'div',
             { className: 'note-preview' },
-            React.createElement(Note, { id: '364234', onBlur: handletoggleeditor, popup: open })
+            React.createElement(Note, { id: props.id, popup: open })
         )
     );
 }

@@ -1,11 +1,11 @@
-import React,{useState} from "react";
+import React from "react";
 
 export default function RegisterPageForm(props){
     function registerUser(e){
         e.preventDefault();
         if(e.target.passwordinput.value === e.target.passwordinputagain.value){
             var userInfo = {
-                username:e.target.usernameinput.value,
+                email:e.target.emailinput.value,
                 password:e.target.passwordinput.value,
                 passwordagain:e.target.passwordinputagain.value
             }
@@ -17,7 +17,7 @@ export default function RegisterPageForm(props){
     return(
         <div className='register-page-form'>
             <form onSubmit={registerUser}>
-            <input type="text" placeholder="enter your username" name="usernameinput"/>
+            <input type="email" placeholder="enter your email" name="emailinput"/>
             <input type="password" placeholder="enter your password" name="passwordinput"/>
             <input type="password" placeholder="confirm your password" name="passwordinputagain"/>
             <button type="submit">

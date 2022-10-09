@@ -10,21 +10,26 @@ import DeadLineApp from './components/DeadLineApp/DeadLineApp'
 import FutureLetterApp from './components/FutureLetterApp/FutureLetterApp'
 import GoalsApp from './components/GoalsApp/GoalsApp'
 import RegisterPage from './components/RegisterPage/RegisterPage'
+import LoginPage from './components/LoginPage/LoginPage'
+import LogoutButton from './components/LogoutButton/LogoutButton'
 
 class App extends React.Component {
     render(){
         return(
             <div id="App">
                 <RegisterPage/>
-                {/* <TodoApp/>
-                <StopWatchApp/>
-                <TimerApp/>
-                <NotesApp/>
+                <LoginPage/>
+                <LogoutButton/>
+
+                {/* <TodoApp/> */}
+                {/* <StopWatchApp/> just logs */}
+                {/* <TimerApp/> just logs */}
+                {/* <NotesApp/> */}
                 <WeeksToLive/>
                 <DeadLineApp/>
                 <FutureLetterApp/>
-                <MusicApp/>
-                <GoalsApp/> */}
+                {/* <MusicApp/>  */}
+                <GoalsApp/>
             </div>
         )
     }

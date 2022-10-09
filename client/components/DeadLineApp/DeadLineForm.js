@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import randomNumber from '../../../server/functions/randomNumber';
 
 export default function DeadLineForm(props) {
 
@@ -15,7 +16,11 @@ export default function DeadLineForm(props) {
 
     function addDeadLine(data) {
         data.preventDefault();
-        props.addDeadLine({ name: name, due: data.target.due.value });
+        var dueDateArray = data.target.due.value.split('-');
+        var dueTime = new Date(dueDateArray[1] + '/' + dueDateArray[2] + '/' + dueDateArray[0]).getTime();
+        var ranNumber = randomNumber(10);
+        console.log(Date.now());
+        props.addDeadLine({ name: name, reminder: dueTime, id: ranNumber, dueTime: dueTime, dueDate: data.target.due.value });
     }
     function setDeadLineName(e) {
         setname(e.target.value);

@@ -5,29 +5,80 @@ import TodoDisplay from './TodoDisplay';
 class TodoApp extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { todos: [] };
+        this.state = { alltodos: [] };
         this.newTodo = this.newTodo.bind(this);
         this.changeTodoState = this.changeTodoState.bind(this);
         this.changeTodoText = this.changeTodoText.bind(this);
     }
     changeTodoState(e) {
-        var todos_copy = this.state.todos;
-        var index = todos_copy.findIndex(a => a.id == parseInt(e));
-        todos_copy[index].done = !todos_copy[index].done;
-        this.setState({ todos: todos_copy });
+        var todos_copy = this.state.alltodos;
+        var indexdate = todos_copy.findIndex(a => a.date == e.date);
+        var indextodo = todos_copy[indexdate].todos.findIndex(a => a.id == e.id);
+        var current = !todos_copy[indexdate].todos[indextodo].done;
+        todos_copy[indexdate].todos[indextodo].done = current;
+        this.setState({ alltodos: todos_copy });
+        e.done = current;
+        fetch('/postData/todo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'Application/json' },
+            body: JSON.stringify(e)
+        }).then(res => res.json()).then(result => console.log(result)).catch(err => console.log(err));
     }
     newTodo(e) {
-        var todos_copy = this.state.todos;
-        todos_copy.push(e);
-        this.setState({ todos: todos_copy });
+        var todayDate = new Date();
+        var todayDatevalue = todayDate.getDate();
+        var todayMonthvalue = todayDate.getMonth() + 1;
+        var todayYearvalue = todayDate.getFullYear();
+        var finaldate = todayDatevalue + '/' + todayMonthvalue + '/' + todayYearvalue;
+        e.date = finaldate;
+        var todos_copy = this.state.alltodos;
+        var existingdate = todos_copy.filter(e => e.date == finaldate);
+        console.log(existingdate);
+        if (existingdate.length == 0) {
+            var newdate = {
+                date: finaldate,
+                todos: []
+            };
+            newdate.todos.push(e);
+            todos_copy.push(newdate);
+            this.setState({ alltodos: todos_copy });
+        } else {
+            var index = todos_copy.findIndex(a => a.date == finaldate);
+            todos_copy[index].todos.push(e);
+            this.setState({ alltodos: todos_copy });
+        }
+        fetch('/postData/newtodo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'Application/json' },
+            body: JSON.stringify(e)
+        }).then(res => res.json()).then(result => console.log(result)).catch(err => console.log(err));
     }
     changeTodoText(e) {
-        console.log(e);
-        var todos_copy = this.state.todos;
-        var index = todos_copy.findIndex(a => a.id == parseInt(e.id));
-        todos_copy[index].text = e.text;
-        this.setState({ todos: todos_copy });
+        var todos_copy = this.state.alltodos;
+        var indexdate = todos_copy.findIndex(a => a.date == e.date);
+        var indextodo = todos_copy[indexdate].todos.findIndex(a => a.id == e.id);
+        todos_copy[indexdate].todos[indextodo].text = e.text;
+        this.setState({ alltodos: todos_copy });
+        e.done = todos_copy[indexdate].todos[indextodo].done;
+        fetch('/postData/todo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'Application/json' },
+            body: JSON.stringify(e)
+        }).then(res => res.json()).then(result => console.log(result)).catch(err => console.log(err));
     }
+
+    componentDidMount() {
+        fetch('/getData/todos', {
+            method: 'GET',
+            headers: { 'Content-Type': 'Application/json' }
+        }).then(res => res.json()).then(result => {
+            if (result.status != 301) {
+                result.alltodos.reverse();
+                this.setState({ alltodos: result.alltodos });
+            }
+        }).catch(err => console.log(err));
+    }
+
     render() {
         return React.createElement(
             'div',
@@ -38,7 +89,7 @@ class TodoApp extends React.Component {
                 'Todo App'
             ),
             React.createElement(TodoForm, { newTodo: this.newTodo, existing_todos: this.state.todos }),
-            React.createElement(TodoDisplay, { todos: this.state.todos, changeTodoText: this.changeTodoText, changeTodoState: this.changeTodoState })
+            this.state.alltodos.length > 0 ? this.state.alltodos.map(data => React.createElement(TodoDisplay, { key: data.date, date: data.date, todos: data.todos, changeTodoText: this.changeTodoText, changeTodoState: this.changeTodoState })) : ''
         );
     }
 }

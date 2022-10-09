@@ -5,10 +5,34 @@ import WeeksToLiveData from './WeeksToLiveData';
 class WeeksToLive extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { weeksToLive: 0 };
+        this.state = { weeksToLive: 0, dob: '' };
         this.setDob = this.setDob.bind(this);
+        this.weeksToLive = this.weeksToLive.bind(this);
     }
+
+    componentDidMount() {
+        fetch('/getData/dob', {
+            method: 'GET',
+            headers: { 'content-Type': 'application/json' }
+        }).then(res => res.json()).then(result => {
+            this.weeksToLive(result.dob);
+            this.setState({ dob: result.dob });
+        }).catch(err => console.log(err));
+    }
+
     setDob(e) {
+        this.setState({ dob: e });
+        var data = { dob: e };
+        fetch('/postData/dob', {
+            method: 'POST',
+            headers: { 'Content-Type': 'Application/json' },
+            body: JSON.stringify(data)
+        }).then(res => res.json()).then(result => console.log(result)).catch(err => console.log(err));
+        this.weeksToLive(e);
+    }
+
+    weeksToLive(e) {
+        console.log(e);
         const currentDate = new Date();
         const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
         var todayDate = currentDate.toLocaleDateString('en-us', options);
@@ -20,12 +44,11 @@ class WeeksToLive extends React.Component {
         var monthdifference = parseInt(todayarray[0] - selectedarray[1]);
         var datedifference = parseInt(todayarray[1] - selectedarray[2]);
 
-        var dayspassed = yeardifference * 364 + (monthdifference < 0 ? monthdifference * 30 + monthdifference / 2 : monthdifference * 30 + monthdifference / 2) + (datedifference < 0 ? datedifference * -1 : datedifference); //total days
+        var dayspassed = yeardifference * 364 + (monthdifference * 30 + monthdifference / 2) + datedifference; //total days
 
         var weeksToLive = Math.round(dayspassed < 0 ? dayspassed * -1 / 7 : dayspassed / 7);
+        console.log(weeksToLive, yeardifference, monthdifference, datedifference);
         this.setState({ weeksToLive: weeksToLive });
-
-        console.log(todayDate);
     }
 
     render() {
@@ -35,7 +58,7 @@ class WeeksToLive extends React.Component {
             React.createElement(
                 'div',
                 { className: 'weeks-to-live-container' },
-                React.createElement(WeeksToLiveForm, { setDob: this.setDob }),
+                this.state.dob == '' ? React.createElement(WeeksToLiveForm, { setDob: this.setDob }) : '',
                 React.createElement(WeeksToLiveData, { weeksToLive: this.state.weeksToLive })
             )
         );

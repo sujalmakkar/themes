@@ -7,15 +7,12 @@ export default class RegisterPage extends React.Component {
         this.registerUser = this.registerUser.bind(this);
     }
     registerUser(e) {
-        e.time = new Date().toString();
-        e.utctime = new Date().toUTCString();
-        console.table(e);
         fetch('http://localhost:3000/registeruser', {
             headers: { 'Content-Type': 'application/json' },
             method: 'POST',
             body: JSON.stringify(e)
         }).then(res => res.json()).then(result => {
-            alert(result);
+            console.log(result);
         });
     }
     render() {

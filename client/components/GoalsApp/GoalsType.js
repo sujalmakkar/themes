@@ -28,3 +28,5 @@ export default function GoalsType(props) {
         )
     );
 }
+
+var data = { years: [{ year: '2022', goals: [] }], months: [{ month: '2022/1', goals: [] }], weeks: [{ week: '2022/1', goals: [] }] };

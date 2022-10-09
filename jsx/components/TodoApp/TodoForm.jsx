@@ -1,22 +1,22 @@
 import React ,{useState} from 'react'
+import randomNumber from '../../../server/functions/randomNumber'
 
 export default function TodoForm(props){
 
     const [todo,settodo] = useState('')
 
     function submitTodo(e){
+        var todayDate = new Date()
+        var todayDatevalue = todayDate.getDate()
+        var todayMonthvalue = todayDate.getMonth()+1
+        var todayYearvalue = todayDate.getFullYear()
+        var finaldate = todayDatevalue + '/' + todayMonthvalue + '/' +todayYearvalue 
+
         e.preventDefault()
 
-        var GenRandom = true
-        var randomId = 0
-
-        while (GenRandom == true){
-            randomId = Math.floor( Math.random() * (999999 - 111111) + 111111);
-            var exists = props.existing_todos.filter(todos => todos.id == randomId ) //check if dublicate ID exists
-            exists.length > 0 ? GenRandom = true : GenRandom = false
-        }
+        var randomId = randomNumber(10);
     
-        props.newTodo({text:todo,done:false,id:randomId})
+        props.newTodo({text:todo,done:false,id:randomId,date:finaldate})
         settodo('')
     }
     

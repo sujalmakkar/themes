@@ -10,7 +10,7 @@ export default function DeadLineContainer(props){
             <div className='dead-line-container'>
                 {
                     deadLines.map(a=>
-                        <DeadLine name={a.name} due={a.due} />
+                        <DeadLine name={a.name} dueTime={a.dueTime} dueDate={a.dueDate} key={a.id} />
                     )
                     }
             </div>
@@ -26,12 +26,8 @@ function DeadLine(props){
         getTimeInMinutes()
 
         function getTimeInMinutes(){
-            var dueDateArray  = props.due.split('-')
-            var dueDate = new Date(dueDateArray[1]+'/'+dueDateArray[2]+'/'+dueDateArray[0]).getTime()
             var currentTime = Date.now()
-            var timeRemainingInSeconds = parseInt((((dueDate+86400000) - currentTime).toString()).slice(0,-3))
-    
-    
+            var timeRemainingInSeconds = parseInt((((props.dueTime+86400000) - currentTime).toString()).slice(0,-3))
             var minutes = Math.trunc(timeRemainingInSeconds/60)
             var hours = Math.trunc(minutes/60)
             var days = Math.trunc(hours/24)
@@ -53,7 +49,7 @@ function DeadLine(props){
 
     return(
         <div className="dead-line">
-        <div className='dead-line-name'>{props.name}</div>
+        <div className='dead-line-name'>{props.dueDate}</div>
         <div className='dead-line-due'>{props.due}</div>
         <div className='dead-line-time-left-display'>
             Time Left: {timeLeftInMinutes}
