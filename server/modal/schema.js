@@ -16,34 +16,19 @@ var DataSchema = new mongoose.Schema({
 
         country:{type:String},
 
-        StopWatchLogs:[{
-            date:{type:String},
-            logs:[]
-        }],
+        StopWatchLogs:[],
 
-        TimerLogs:[{
-            date:{type:String},
-            logs:[]
-        }],
+        TimerLogs:[],
 
-        alltodos:[{
-            date:'',
-            logs:{}
-        }],
+        alltodos:[],
 
         allgoals:{years:[],months:[],weeks:[]},
 
-        alldeadlines:[
-            {id:{type:Number,required:true},name:String,reminder:{utcTime:Number,localTime:Number}}
-        ],
+        alldeadlines:[],
 
-        allletters:[
-            {id:{type:Number,required:true},subject:String,body:String,reminder:{utcTime:Number,localTime:Number}}
-        ],
+        allletters:[],
 
-        allnotes:[
-            {id:{type:Number},dateCreated:{type:String},data:{heading:{type:String},content:{type:String}}}
-        ]
+        allnotes:[]
 
 })
 

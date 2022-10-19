@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 
 export default function DeadLineContainer(props) {
     const [deadLines, setdeadLines] = useState([]);
+
+    console.log(props.deadLines.length);
+
     useEffect(() => {
         setdeadLines(props.deadLines);
     });
@@ -9,7 +12,7 @@ export default function DeadLineContainer(props) {
     return React.createElement(
         'div',
         { className: 'dead-line-container' },
-        deadLines.map(a => React.createElement(DeadLine, { name: a.name, dueTime: a.dueTime, dueDate: a.dueDate, key: a.id }))
+        deadLines.length > 0 ? deadLines.map(a => React.createElement(DeadLine, { name: a.name, dueTime: a.dueTime, dueDate: a.dueDate, key: a.id })) : ''
     );
 }
 
@@ -22,7 +25,7 @@ function DeadLine(props) {
 
         function getTimeInMinutes() {
             var currentTime = Date.now();
-            var timeRemainingInSeconds = parseInt((props.dueTime + 86400000 - currentTime).toString().slice(0, -3));
+            var timeRemainingInSeconds = parseInt((props.dueTime - currentTime).toString().slice(0, -3));
             var minutes = Math.trunc(timeRemainingInSeconds / 60);
             var hours = Math.trunc(minutes / 60);
             var days = Math.trunc(hours / 24);
@@ -48,12 +51,12 @@ function DeadLine(props) {
         React.createElement(
             'div',
             { className: 'dead-line-name' },
-            props.dueDate
+            props.name
         ),
         React.createElement(
             'div',
             { className: 'dead-line-due' },
-            props.due
+            props.dueDate
         ),
         React.createElement(
             'div',

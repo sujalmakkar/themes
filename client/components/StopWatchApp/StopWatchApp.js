@@ -19,7 +19,7 @@ class StopWatchApp extends React.Component {
             null,
             React.createElement(
                 'div',
-                null,
+                { id: 'StopWatchApp', className: 'app' },
                 'This is a STOP WATCH App',
                 React.createElement(StopWatch, { addLog: this.addLog }),
                 React.createElement(StopWatchLogsDisplay, { stopWatchLogs: this.state.logs })

@@ -1,24 +1,48 @@
-import React,{useState} from 'react'
-import Note from './Note'
+import React,{useState,useEffect} from 'react'
 
 export default function NoteContainer(props){
 
-    const[open,setopen] = useState(false)
+    function handleopeneditor(e){
+        props.noteId(props.id)
+    }
 
-    function handlecloseeditor(e){
-        console.log(e)
-        setopen(false)
+    var Heading = null ;
+    function headingref(e){
+        Heading = e 
     }
-    function handleopeneditor(){
-        setopen(true)
+
+    var Content = null ;
+    function contentref(e){
+        Content = e 
     }
+
+    function deleteNote(e){
+        props.deleteNote(props.id)
+    }
+
+    useEffect(()=>{
+        Heading.innerHTML = props.heading
+        Content.innerHTML = props.content
+    },[props])
 
     return(
-        <div className="note-container" onClick={handleopeneditor}  data-id={props.id}>
-            <div className='note-preview'>
-            <Note id={props.id} popup={open}/> 
+        <React.Fragment>
+        <div className="note-container" data-id={props.id} >
+            <div className='note-preview' onClick={handleopeneditor}>
+            <div className='Heading' ref={headingref}></div>
+            <div className='Content' ref={contentref}></div>
+            </div>
+            <div className="note-info">
+            <span className="note-created">
+                {props.created}
+            </span>
+            <span className="delete-note" onClick={deleteNote}>
+                Delete Note
+            </span>
+
             </div>
         </div>
+        </React.Fragment>
     )
  
 }

@@ -5,7 +5,7 @@ import WeeksToLiveData from './WeeksToLiveData';
 class WeeksToLive extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { weeksToLive: 0, dob: '' };
+        this.state = { weeksToLive: 0, dob: '', weeksToLiveDecimal: 0 };
         this.setDob = this.setDob.bind(this);
         this.weeksToLive = this.weeksToLive.bind(this);
     }
@@ -32,7 +32,7 @@ class WeeksToLive extends React.Component {
     }
 
     weeksToLive(e) {
-        console.log(e);
+        // setInterval(()=>{
         const currentDate = new Date();
         const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
         var todayDate = currentDate.toLocaleDateString('en-us', options);
@@ -46,20 +46,34 @@ class WeeksToLive extends React.Component {
 
         var dayspassed = yeardifference * 364 + (monthdifference * 30 + monthdifference / 2) + datedifference; //total days
 
-        var weeksToLive = Math.round(dayspassed < 0 ? dayspassed * -1 / 7 : dayspassed / 7);
-        console.log(weeksToLive, yeardifference, monthdifference, datedifference);
-        this.setState({ weeksToLive: weeksToLive });
+        var weeksToLive = dayspassed < 0 ? dayspassed * -1 / 7 : dayspassed / 7;
+        var weeksToLiveRound = Math.trunc(weeksToLive);
+        var numsplit = weeksToLive.toString().split('.');
+        if (numsplit.length == 1) {
+            numsplit.push('000');
+        }
+        var decimal = numsplit[1].slice(0, 2);
+        var weeks = numsplit[0] + '.' + decimal;
+
+        this.setState({ weeksToLive: weeksToLiveRound, weeksToLiveDecimal: weeks });
+        console.log('wtf', weeksToLiveRound, weeks);
+        // },20000000)
     }
 
     render() {
         return React.createElement(
             'div',
-            { id: 'WeeksToLive' },
+            { id: 'WeeksToLive', className: 'app' },
+            React.createElement(
+                'div',
+                { className: 'app-heading' },
+                'TimeLine'
+            ),
             React.createElement(
                 'div',
                 { className: 'weeks-to-live-container' },
                 this.state.dob == '' ? React.createElement(WeeksToLiveForm, { setDob: this.setDob }) : '',
-                React.createElement(WeeksToLiveData, { weeksToLive: this.state.weeksToLive })
+                React.createElement(WeeksToLiveData, { weeksToLive: this.state.weeksToLive, weeksToLiveDecimal: this.state.weeksToLiveDecimal })
             )
         );
     }

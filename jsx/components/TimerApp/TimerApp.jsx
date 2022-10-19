@@ -14,7 +14,7 @@ class TimerApp extends React.Component{
         }
         render(){
             return(
-                <div id="TimerApp">
+                <div id="TimerApp" className='app'>
                     <Timer addLog={this.addLog}/>
                     <Timer addLog={this.addLog}/>
                     <TimerLogsDisplay logs={this.state.logs}/>

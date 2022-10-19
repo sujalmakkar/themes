@@ -5,14 +5,13 @@ export default function GoalsType(props){
         props.changeType(e.target.value)
     }
     return(
-        <div className='goals-type'>
-            <select className='goals-timeperiod-selector' onChange={changeTimeInterval}>
-                <option value="years">Years</option>
-                <option value="months">Months</option>
-                <option value="weeks">Weeks</option>
+        <div className='goals-type margin-10' id="type">
+
+            <select className='goals-timeperiod-selector background-main ' onChange={changeTimeInterval}>
+                <option value="years" className='option'>Years</option>
+                <option value="months" className='option'>Months</option>
+                <option value="weeks" className='option'>Weeks</option>
             </select>
         </div>
     )
 }
-
-var data = {years:[{year:'2022',goals:[]}],months:[{month:'2022/1',goals:[]}],weeks:[{week:'2022/1',goals:[]}]}

@@ -2,6 +2,8 @@ import React, { useEffect,useState } from 'react'
 export default function WeeksToLiveData(props){
 
     const[hoverdata,sethoverdata] = useState({year:0,week:0})
+    const averagelifespan = 73
+    const totalweeks= averagelifespan*52
 
     useEffect(()=>{
         var allweeks = document.getElementsByClassName('week')
@@ -11,13 +13,10 @@ export default function WeeksToLiveData(props){
               }
             for(var i = 0; i < props.weeksToLive;i++){
                 allweeks[i].classList.add('lived');
+                allweeks[props.weeksToLive].classList.add('living')
             }
         }
         weeks()
-
-        setInterval(()=>{
-            weeks()
-        },10000000)
     },[props.weeksToLive])
 
     var weekinfocontent = null;
@@ -26,10 +25,7 @@ export default function WeeksToLiveData(props){
     }
 
     function weekinfoposition(e){
-        weekinfocontent.classList.add('hidden')
-        if(e.target.classList[0]=='week' || e.target.classList[0] =='weeks-container'){
             weekinfocontent.classList.remove('hidden')
-        }
     }
 
     function showWeekInfo(e){
@@ -37,8 +33,10 @@ export default function WeeksToLiveData(props){
     }
     return( 
     <React.Fragment>
-    <div className="weeks-container" onMouseMove={weekinfoposition}>
-            {Array.from(Array(73), (e, i) => {
+    <div className='flex'>
+    <TimeLineWeeksLeftInfo weeksToLive ={props.weeksToLiveDecimal} weeksToLiveWhole={props.weeksToLive} totalweeks={totalweeks}/>
+    <div className="weeks-container padding-30" onMouseMove={weekinfoposition}>
+            {Array.from(Array(averagelifespan), (e, i) => {
                 return <div className='year' key={i} data-number={i}>
                 {Array.from(Array(52), (e, i) => {
                     return <div className="week" key={i+1} data-number={i+1} onMouseOver={showWeekInfo} ></div>
@@ -50,8 +48,28 @@ export default function WeeksToLiveData(props){
         <div className='week-info'> Week: {hoverdata.week} </div>
     </div>
     </div>
+    <div className='timeline-info-container'></div>
+    </div>
     </React.Fragment>
 
     )
     
+}
+
+
+function TimeLineWeeksLeftInfo(props){
+    return(
+        <React.Fragment>
+            <div className='flex'>
+                <div className="info time-line-weeks-left-info padding-20">
+                    <div className="weeks-passed padding-10">
+                    Weeks Lived : <span className='weeks-lived'>{props.weeksToLive}</span><span>/{props.totalweeks}</span>
+                    </div>
+                    <div className="weeks-death  padding-10">
+                    Death in : <span>{((props.totalweeks - props.weeksToLive).toString()).slice(0,(((props.weeksToLiveWhole).toString()).length)+5)}</span> weeks
+                    </div>
+                </div>
+            </div>
+        </React.Fragment>
+    )
 }

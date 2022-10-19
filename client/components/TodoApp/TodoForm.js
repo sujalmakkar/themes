@@ -29,13 +29,17 @@ export default function TodoForm(props) {
         React.Fragment,
         null,
         React.createElement(
-            'form',
-            { className: 'todo_form', onSubmit: submitTodo },
-            React.createElement('input', { type: 'text', onChange: handleChange, value: todo, name: 'todo_input_1', className: 'input_type_1', required: true }),
+            'div',
+            { className: 'todo-form-container' },
             React.createElement(
-                'button',
-                { type: 'submit' },
-                'Add'
+                'form',
+                { className: 'todo_form margin-10', onSubmit: submitTodo },
+                React.createElement('input', { type: 'text', maxLength: 1000, placeholder: 'Learn React Router Today!', onChange: handleChange, value: todo, name: 'todo_input_1', className: 'input_type_1', required: true }),
+                React.createElement(
+                    'button',
+                    { className: 'ripple-effect', type: 'submit' },
+                    'Add'
+                )
             )
         )
     );

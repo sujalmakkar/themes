@@ -9,16 +9,29 @@ export default function WeeksToLiveForm(props) {
         input = e;
     }
     useEffect(() => {
-        input.max = new Date().toLocaleDateString('en-ca');
+        var today = new Date().toLocaleDateString('en-ca');
+        input.max = today;
+        var splitdate = today.split('-');
+        var year = splitdate[0] - 70;
+        var mindate = year + '-' + splitdate[1] + '-' + splitdate[2];
+        input.min = mindate;
     });
     return React.createElement(
-        'form',
-        { onSubmit: setDob },
-        React.createElement('input', { ref: inputref, type: 'date', name: 'date', required: true }),
+        React.Fragment,
+        null,
         React.createElement(
-            'button',
-            { type: 'submit' },
-            'Submit'
+            'div',
+            { id: 'weeks-to-live-form' },
+            React.createElement(
+                'form',
+                { onSubmit: setDob },
+                React.createElement('input', { ref: inputref, type: 'date', name: 'date', required: true }),
+                React.createElement(
+                    'button',
+                    { className: 'ripple-effect', type: 'submit' },
+                    'Submit'
+                )
+            )
         )
     );
 }

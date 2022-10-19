@@ -17,7 +17,7 @@ class StopWatchApp extends React.Component {
     render(){
         return(
             <React.StrictMode>
-            <div>
+            <div id="StopWatchApp" className='app'>
                 This is a STOP WATCH App
                 <StopWatch addLog = {this.addLog}/>
                 <StopWatchLogsDisplay stopWatchLogs={this.state.logs}/>

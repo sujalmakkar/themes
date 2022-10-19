@@ -9,12 +9,21 @@ export default function WeeksToLiveForm(props){
         input = e
     }
     useEffect(()=>{
-        input.max = new Date().toLocaleDateString('en-ca')
+        var today = new Date().toLocaleDateString('en-ca')
+        input.max = today
+        var splitdate = today.split('-')
+        var year = (splitdate[0] - 70)
+        var mindate = year+'-'+splitdate[1]+'-'+splitdate[2]
+        input.min = mindate
     })
     return(
-        <form onSubmit={setDob}>
-        <input ref={inputref} type="date" name="date" required/>
-        <button type="submit">Submit</button>
-        </form>
+        <React.Fragment>
+        <div id="weeks-to-live-form">
+            <form onSubmit={setDob}>
+                <input ref={inputref} type="date" name="date" required/>
+                <button className="ripple-effect" type="submit">Submit</button>
+            </form>
+        </div>
+        </React.Fragment>
         )
 }

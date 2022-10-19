@@ -1,17 +1,23 @@
 import React from 'react';
 import NotesContainer from './NotesContainer';
 import randomNumber from '../../../server/functions/randomNumber';
+import Note from './Note';
 
 class NotesApp extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { notes: [] };
+        this.state = { notes: [], currentNoteId: 0 };
         this.addLog = this.addLog.bind(this);
         this.addNote = this.addNote.bind(this);
+        this.noteId = this.noteId.bind(this);
+        this.handlecloseeditor = this.handlecloseeditor.bind(this);
+        this.setNewHeading = this.setNewHeading.bind(this);
+        this.setNewContent = this.setNewContent.bind(this);
+        this.deleteNote = this.deleteNote.bind(this);
     }
     addLog(info) {
         var logscopy = this.state.logs;
-        logscopy.push(info);
+        logscopy.unshift(info);
         this.setState({ logs: logscopy });
     }
     componentDidMount() {
@@ -19,7 +25,19 @@ class NotesApp extends React.Component {
         fetch('/getData/notes', {
             method: 'GET',
             headers: { 'Content-Type': 'Application/json' }
-        }).then(res => res.json()).then(result => this.setState({ notes: result })).catch(err => console.log(err));
+        }).then(res => res.json()).then(result => {
+            result.reverse();
+            this.setState({ notes: result });
+        }).catch(err => console.log(err));
+
+        setTimeout(() => {
+            $(function () {
+                $('.notes-flex-container').masonry({
+                    itemSelector: '.note-container',
+                    isAnimated: true
+                });
+            });
+        }, 1000);
     }
     addNote() {
         var id = randomNumber(10);
@@ -32,7 +50,7 @@ class NotesApp extends React.Component {
             data: { heading: 'Heading here!', content: 'Content here!' }
         };
         var statecopy = this.state.notes;
-        statecopy.push(info);
+        statecopy.unshift(info);
 
         fetch('/postData/notes/new', {
             method: 'POST',
@@ -41,6 +59,53 @@ class NotesApp extends React.Component {
         }).then(res => res.json()).then(result => console.log(result)).catch(err => console.log(err));
 
         this.setState({ notes: statecopy });
+
+        this.setState({ currentNoteId: id });
+    }
+    componentDidUpdate() {
+        $(function () {
+            new Masonry('.notes-flex-container', {
+                itemSelector: '.note-container',
+                isAnimated: true
+            });
+        });
+    }
+    noteId(e) {
+        this.setState({ currentNoteId: e });
+    }
+    handlecloseeditor(e) {
+        this.setState({ currentNoteId: 0 });
+    }
+    setNewHeading(e) {
+        var statecopy = this.state.notes;
+        var index = statecopy.findIndex(a => a.id == this.state.currentNoteId);
+
+        statecopy[index].data.heading = e;
+        this.setState({ notes: statecopy });
+    }
+    setNewContent(e) {
+        var statecopy = this.state.notes;
+        var index = statecopy.findIndex(a => a.id == this.state.currentNoteId);
+
+        statecopy[index].data.content = e;
+        this.setState({ notes: statecopy });
+    }
+    deleteNote(e) {
+        var data = {
+            id: e
+        };
+        var statecopy = this.state.notes;
+        var index = statecopy.findIndex(a => a.id == e);
+
+        statecopy.splice(index, 1);
+
+        this.setState({ notes: statecopy });
+
+        fetch('/postData/notes/delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'Application/json' },
+            body: JSON.stringify(data)
+        }).then(res => res.json()).then(result => console.log(result)).catch(err => console.log(err));
     }
     render() {
         return React.createElement(
@@ -48,14 +113,23 @@ class NotesApp extends React.Component {
             null,
             React.createElement(
                 'div',
-                null,
+                { id: 'NotesApp', className: 'app' },
                 'Notes App',
                 React.createElement(
                     'button',
                     { type: 'button', onClick: this.addNote },
-                    'Create New Note'
+                    'Create New Note + '
                 ),
-                this.state.notes.length > 0 ? this.state.notes.map(info => React.createElement(NotesContainer, { id: info.id, key: info.id })) : ''
+                React.createElement(
+                    'div',
+                    { className: 'notes-container' },
+                    React.createElement(
+                        'div',
+                        { className: 'notes-flex-container' },
+                        this.state.notes.length > 0 ? this.state.notes.map(info => React.createElement(NotesContainer, { id: info.id, created: info.dateCreated, key: info.id, content: info.data.content.slice(0, 200), heading: info.data.heading.slice(0, 200), noteId: this.noteId, deleteNote: this.deleteNote })) : ''
+                    )
+                ),
+                this.state.currentNoteId > 100 ? React.createElement(Note, { id: this.state.currentNoteId, popup: true, getHeading: this.setNewHeading, getContent: this.setNewContent, closeeditor: this.handlecloseeditor }) : ''
             )
         );
     }

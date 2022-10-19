@@ -2,16 +2,19 @@ import React, { useEffect , useState } from 'react'
 
 export default function DeadLineContainer(props){
     const [deadLines,setdeadLines] = useState([])
+
+    console.log(props.deadLines.length)
+
         useEffect(()=>{
             setdeadLines(props.deadLines)
         })
 
         return (
             <div className='dead-line-container'>
-                {
+                {   deadLines.length > 0 ?
                     deadLines.map(a=>
                         <DeadLine name={a.name} dueTime={a.dueTime} dueDate={a.dueDate} key={a.id} />
-                    )
+                    ) : ''
                     }
             </div>
         )
@@ -27,7 +30,7 @@ function DeadLine(props){
 
         function getTimeInMinutes(){
             var currentTime = Date.now()
-            var timeRemainingInSeconds = parseInt((((props.dueTime+86400000) - currentTime).toString()).slice(0,-3))
+            var timeRemainingInSeconds = parseInt((((props.dueTime) - currentTime).toString()).slice(0,-3))
             var minutes = Math.trunc(timeRemainingInSeconds/60)
             var hours = Math.trunc(minutes/60)
             var days = Math.trunc(hours/24)
@@ -49,8 +52,8 @@ function DeadLine(props){
 
     return(
         <div className="dead-line">
-        <div className='dead-line-name'>{props.dueDate}</div>
-        <div className='dead-line-due'>{props.due}</div>
+        <div className='dead-line-name'>{props.name}</div>
+        <div className='dead-line-due'>{props.dueDate}</div>
         <div className='dead-line-time-left-display'>
             Time Left: {timeLeftInMinutes}
         </div>

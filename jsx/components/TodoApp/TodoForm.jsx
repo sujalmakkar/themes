@@ -27,10 +27,12 @@ export default function TodoForm(props){
 
     return(
         <React.Fragment>
-        <form className="todo_form" onSubmit={submitTodo}>
-        <input type="text" onChange={handleChange} value={todo} name="todo_input_1" className="input_type_1" required/>
-        <button type="submit">Add</button>
-        </form>
+            <div className='todo-form-container'>
+            <form className="todo_form margin-10" onSubmit={submitTodo}>
+                <input type="text" maxLength={1000} placeholder="Learn React Router Today!" onChange={handleChange} value={todo} name="todo_input_1" className="input_type_1" required/>
+                <button className="ripple-effect" type="submit">Add</button>
+            </form>
+            </div>
         </React.Fragment>
     )
 }

@@ -6,27 +6,25 @@ export default function GoalsType(props) {
     }
     return React.createElement(
         'div',
-        { className: 'goals-type' },
+        { className: 'goals-type margin-10', id: 'type' },
         React.createElement(
             'select',
-            { className: 'goals-timeperiod-selector', onChange: changeTimeInterval },
+            { className: 'goals-timeperiod-selector background-main ', onChange: changeTimeInterval },
             React.createElement(
                 'option',
-                { value: 'years' },
+                { value: 'years', className: 'option' },
                 'Years'
             ),
             React.createElement(
                 'option',
-                { value: 'months' },
+                { value: 'months', className: 'option' },
                 'Months'
             ),
             React.createElement(
                 'option',
-                { value: 'weeks' },
+                { value: 'weeks', className: 'option' },
                 'Weeks'
             )
         )
     );
 }
-
-var data = { years: [{ year: '2022', goals: [] }], months: [{ month: '2022/1', goals: [] }], weeks: [{ week: '2022/1', goals: [] }] };

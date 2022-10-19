@@ -22,7 +22,7 @@ app.use(cookieParser())
 require('dotenv').config()
 app.use(bodyParser.json())
 
-const port =  process.env.port || 3000
+const port =   3000
 
 const server = app.listen(port,()=>{
     console.log('listening')
@@ -43,8 +43,11 @@ mongoClient.connect(url=process.env.DB).then(client=>{
 // SOCKET TO EDIT NOTE DATA
 io.on('connection',async socket=>{
     var auth = socket.handshake.headers.cookie
-    var token = auth.split('=');
-    var uid = await authfn(token[1])
+    console.log(auth,'auth')
+    var token0 = auth.split(';',);
+    var token1 = token0[0].split('=')
+    console.log(token1)
+    var uid = await authfn(token1[1])
     socket.on('disconnect',()=>{
         console.log(socket.id)
     })
@@ -56,7 +59,7 @@ io.on('connection',async socket=>{
               {"note.id" : e.id},
             ]
         })
-        console.log(t)
+        console.log(t,'t')
     })
 })
 

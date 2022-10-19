@@ -5,29 +5,30 @@ import {io} from 'socket.io-client'
 
 var socket = io('http://localhost:3000')
         socket.on('connect',()=>{
-            
+            console.log('connected')
 })
 
 
 export default function Note(props){
 
-    // const [demodata] = useState({heading:'Heading here!',content:'content here!'})
-
     const [headingdata,setheadingdata] = useState('')
     const [contentdata,setcontentdata] = useState('')
-    const [currentplace,setcurrentplace] = useState('')
+    const [currentplace,setcurrentplace] = useState('content')
 
     const fetchstate = useRef(true)
 
     useEffect(()=>{
+
         if(fetchstate.current){
             fetch(`/getData/note/${props.id}`,{
                 method:'GET',
                 headers:{'content-Type':'application/json'}            
             }).then(res=>res.json()).then(result=>{
 
-                setcontentdata(result?result[0].data.content:'Content Here!')
-                setheadingdata(result?result[0].data.heading:'Heading here!')
+                console.log(result)
+
+                setcontentdata(result?result[0]?result[0].data.content:'Content Here!':'Content Here!')
+                setheadingdata(result?result[0]?result[0].data.heading:'Heading here!':'Heading here!')
 
                 Heading.innerHTML= result?result[0].data.heading:'Heading here!'
                 Content.innerHTML= result?result[0].data.content:'Content Here!'
@@ -36,12 +37,85 @@ export default function Note(props){
             return () =>{
                 fetchstate.current = false
             }
+
         } 
+    },[])
+
+    useEffect(()=>{
+        if(fetchstate.current){
+        var noteHeading = $('.note-heading')[0]
+
+        noteHeading?noteHeading.addEventListener('paste', function (e) {
+            // Prevent the default action
+            e.preventDefault();
+        
+            // Get the copied text from the clipboard
+            const text = e.clipboardData
+                ? (e.originalEvent || e).clipboardData.getData('text/plain')
+                : // For IE
+                window.clipboardData
+                ? window.clipboardData.getData('Text')
+                : '';
+        
+            if (document.queryCommandSupported('insertText')) {
+                document.execCommand('insertText', false, text);
+            } else {
+                // Insert text at the current position of caret
+                const range = document.getSelection().getRangeAt(0);
+                range.deleteContents();
+        
+                const textNode = document.createTextNode(text);
+                range.insertNode(textNode);
+                range.selectNodeContents(textNode);
+                range.collapse(false);
+        
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
+        }):''
+
+        var noteContent = $('.note-content')[0]
+
+        noteContent?noteContent.addEventListener('paste', function (e) {
+            // Prevent the default action
+            e.preventDefault();
+        
+            // Get the copied text from the clipboard
+            const text = e.clipboardData
+                ? (e.originalEvent || e).clipboardData.getData('text/plain')
+                : // For IE
+                window.clipboardData
+                ? window.clipboardData.getData('Text')
+                : '';
+        
+            if (document.queryCommandSupported('insertText')) {
+                document.execCommand('insertText', false, text);
+            } else {
+                // Insert text at the current position of caret
+                const range = document.getSelection().getRangeAt(0);
+                range.deleteContents();
+        
+                const textNode = document.createTextNode(text);
+                range.insertNode(textNode);
+                range.selectNodeContents(textNode);
+                range.collapse(false);
+        
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
+        }):''
+        return () =>{
+            fetchstate.current = false
+        }
+    } 
     },[])
     var Heading = null ;
     function headingref(e){
         Heading = e
     }
+
 
     var Content = null ;
     function contentref(e){
@@ -50,10 +124,16 @@ export default function Note(props){
 
     function handleContent(e){
         setcontentdata(Content.innerHTML)
+        var max = false;
+        (Content.innerHTML).length > 200 ? max=true : max=false
+        props.getContent((Content.innerHTML).slice(0,200)+(max?'...':''))
     }
 
     function handleHeading(e){
         setheadingdata(Heading.innerHTML)
+        var max = false;
+        (Heading.innerHTML).length > 200 ? max=true : max=false
+        props.getHeading((Heading.innerHTML).slice(0,200)+(max?'...':''))
     }
     
 
@@ -88,13 +168,18 @@ export default function Note(props){
         }
     }
 
-    function addHeading(){
-        if(currentplace === 'content'){
-            Content.innerHTML = contentdata + `<h2 data-name='content' class="heading">Note Heading</h2><br>`
-        } else if(currentplace === 'heading'){
-            Heading.innerHTML = headingdata + `<h2 data-name='heading' class="heading">Note Heading</h2><br>`
-        }
+    function saveEarly(){
+        var contentHTML = contentdata
+        var headingHTML = headingdata
+        socket.emit('noteedit',{
+            id:props.id,
+            data:{
+                heading:headingHTML,
+                content:contentHTML
+            }
+        })
     }
+
     useEffect(() => {
         var contentHTML = contentdata
         var headingHTML = headingdata
@@ -106,37 +191,54 @@ export default function Note(props){
                     content:contentHTML
                 }
             })
-            console.log('send')
         }, 2000)
     
         return () => clearTimeout(delayDebounceFn)
       }, [headingdata,contentdata])
 
+      function closeeditor(e){
+        var contentHTML = contentdata
+        var headingHTML = headingdata
+        socket.emit('noteedit',{
+            id:props.id,
+            data:{
+                heading:headingHTML,
+                content:contentHTML
+            }
+        })
+        props.closeeditor()
+      }
 
     return(
-        <div  className={props.popup ? 'note popup' : 'note'} data-id={props.id}>
+        <div  className={props.popup ? 'note popup box-shadow' : 'note box-shadow'} data-id={props.id}>
 
-            <div className='note-text-container' onKeyDown={handlenote} onClick={handlenote}>
-            <div className="note-heading text-container"  ref={headingref} data-name="heading" data-id={props.id} suppressContentEditableWarning='true' contentEditable="true" aria-multiline="true" role="textbox" onKeyDown={handleHeading} onKeyUp={handleHeading} onClick={handleHeading}>
+            <div className="note-contents-container">
+
+                <div className='note-text-container' onKeyDown={handlenote} onClick={handlenote}>
+                <div className="note-heading text-container"  ref={headingref} data-name="heading" data-id={props.id} suppressContentEditableWarning='true' contentEditable="true" aria-multiline="true" role="textbox" onKeyDown={handleHeading} onKeyUp={handleHeading} onClick={handleHeading}>
+                </div>
+
+                <div className="note-content text-container" ref={contentref} data-name='content' data-id={props.id} suppressContentEditableWarning='true' contentEditable="true" aria-multiline="true" role="textbox" onKeyDown={handleContent} onKeyUp={handleContent} onClick={handleContent}></div>
+                </div>
             </div>
-
-            <div className="note-content text-container" ref={contentref} data-name='content' data-id={props.id} suppressContentEditableWarning='true' contentEditable="true" aria-multiline="true" role="textbox" onKeyDown={handleContent} onKeyUp={handleContent} onClick={handleContent}></div>
-            </div>
-
-
             <div className='note-tools-container'>
-                <div className='note-tool'>
-                    <input type="file" accept="image/png, image/jpg, image/jpeg , image/gif" onChange={uploadImage} />
-                </div>
-                <div className='note-tool'>
-                    <button type="button" onClick={addlist}>Add list</button>
-                </div>
-                <div className='note-tool'>
-                    <button type="button" onClick={addHeading}>Add Heading</button>
-                </div>
+                    <div className='note-tools'>
+                        <div className='note-tool'>
+                            <input type="file" name="file" id="file" className="image-input" accept="image/png, image/jpg, image/jpeg , image/gif" onChange={uploadImage} />
+                            <label htmlFor="file" onChange={uploadImage}>
+                            <img src="https://img.icons8.com/material-rounded/96/000000/add-image.png"/>
+                            </label>
+                        </div>
+                        <div className='note-tool'>
+                            <button type="button" onClick={addlist}>
+                            <img src="https://img.icons8.com/material-outlined/96/000000/list.png"/>
+                            </button>
+                        </div>
+                    </div>
+                    <div className="note-close" onClick={closeeditor} onMouseOver={saveEarly}>
+                    <img src="https://img.icons8.com/material-outlined/96/000000/delete-sign.png"/>
+                    </div>
             </div>
-
-
         </div>
     )
 }

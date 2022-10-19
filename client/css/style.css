@@ -1,74 +1,618 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,400;0,500;0,600;1,100;1,200;1,400;1,500;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Poppins:ital,wght@0,100;0,200;0,400;0,500;0,600;1,100;1,200;1,400;1,500;1,900&display=swap');
+
+
+/* 
+//light mode
+colors white shades = #DBDAD5
+black = #181818
+
+//dark mode
+*/
+
+
+
 *{
     user-select:none;
     padding:0;
     margin:0;
     box-sizing: border-box;
 }
+
+
+:root {
+    --green: #157e7e;
+    --white: #f0f0f0;
+  }
+
+
 body{
     width:100%;
     height:100vh;
     font-family:poppins;
+    background:#e9f0f5;
+    color:#157e7e;
 }
 
-#TodoApp .todo-text{
-    user-select:none;
+/* DEFAULT STYLES  APPLIED ON EVERY PARTICULAR TYPE  OF ELEMENT*/
+
+input,button{
+    background: transparent;
+    padding:10px;
+    font-size: 18px;
+    border:1px solid #157e7e;
+    font-family: poppins;
+}
+input{
+    background:#157e7e11;
+}
+button{
+    color:#f0f0f0;
+    cursor:pointer;
+    background: #157e7e;
+}
+
+
+/* DEFAULT STYLES  APPLIED ON EVERY PARTICULAT TYPE  OF ELEMENT*/
+
+
+
+/* DEfAULT STYLES FOR CERTAIN CLASS NAMES */
+
+.app{
+    width:100%;
+}
+.ripple-effect{
+    position: relative;
+    overflow: hidden;
+}
+.box-shadow{
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 3px 10px 0px;
+}
+
+.padding-10{
+    padding:10px;
+}
+.padding-20{
+    padding:20px;
+}.padding-30{
+    padding:30px;
+}.padding-40{
+    padding:40px;
+}.padding-50{
+    padding:50px;
+}.padding-100{
+    padding:100px;
+}
+
+
+.margin-10{
+    margin:10px;
+}
+
+.margin-20{
+    margin:20px;
+}
+.margin-30{
+    margin:30px;
+}
+.margin-40{
+    margin:40px;
+}
+.margin-50{
+    margin:50px;
+}
+.margin-100{
+    margin:100px;
+}
+.margin{
+    margin:auto;
+}
+
+
+.width-100{
+    width:100%;
+}
+.width-90{
+    width:90%;
+}
+.margin-auto{
+    margin:auto;
+}
+.margin-top-10{
+    margin-top: 10px;
+}
+.margin-top-20{
+    margin-top: 20px;
+}
+.margin-bottom-10{
+    margin-bottom: 10px;
+}
+.margin-bottom-20{
+    margin-bottom: 20px;
+}
+.background-main{
+    background: #b1d3ec4f;
+}
+.border-main{
+    border:.5px solid #1c747475;   
+}
+.color-main{
+    color:#000;
+}
+.color-heading{
+    color:#157e7e;
+}
+.line-through{
+    text-decoration: line-through;
+}
+.border-radius-4{
+    border-radius:4px;
+}
+.border-radius-6{
+    border-radius:6px;
+}
+.border-radius-8{
+    border-radius:8px;
+}
+.border-radius-10{
+    border-radius:10px;
+}
+.app-heading{
+    width:100%;
+    display: flex;
+    align-items: center;
+    font-size: 40px;
+    font-weight: 700;
+    justify-content:center;
+    font-family: montserrat;
+    padding-bottom:20px;
+}
+/* DEFAULT STYLES FOR CERTAIN CLASS NAMES */
+
+
+
+
+/* CONST STYLES */
+
+
+::-webkit-scrollbar-track {
+    background: transparent;
+  }  
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #157e7e;
+  }
+#contents{
+    z-index: 5;
+}
+.noise{
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+    visibility: inherit;
+    color: #000;
+    cursor: pointer;
+    /* -webkit-user-select: none; */
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
+    box-sizing: border-box;
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    /* background-image: url('https://www.richardsancho.com/img/noise.png'); */
+    background-size: auto;
+    background-repeat: repeat;
+    mix-blend-mode: overlay;
+    opacity: .2;
+    z-index:-136;
+}
+#webgl_wrapper{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left:0;
+    top:0;
+    z-index: -1;
+    opacity:.4;
+    /* background:url(../images/bg_1.jpg);
+    background-size:400% 400%;
+    opacity: .7;
+    background-position: 0% 0%;
+    animation :bg 5s linear infinite; */
+}
+
+@keyframes bg{
+    0%{
+        background-position: 0% 0%;
+    }
+    50%{
+        background-position: 75% 75%;
+    }
+    100%{
+        background-position:0% 0%;
+    }
+}
+
+#page{
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    flex-direction: column;
+    background-size:cover;
+    z-index: 5;
+    -webkit-backdrop-filter: blur(80px);
+    backdrop-filter: blur(80px)
+    
+}
+
+#fixed-navbar{
+    width:100%;
+    height:auto;
+    padding:20px;
+    border-bottom: 1px solid #157e7e;
+}
+#fixed-navbar .logo-container .logo{
+    font-weight: 800;
+    font-size:28px;
+    font-family:montserrat;
+    color:#157e7e;
+}
+#fixed-navbar .logo-container .logo span{
+    -webkit-text-stroke: 1px #032727;
+    color:transparent;
+}
+
+#App-container{
+    width:100vw;
+    height:90%;
+    display:flex;
+    flex-direction: row;
+}
+#App{
+    width:95%;
+    height:100%;
+    max-height: 100vh;
+    padding-bottom: 40px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+.apps-display{
+    display:none;
+    animation:hide .4s ease;
+}
+
+.apps-display.active{
+    display:block;
+    animation:show .4s ease;
+}
+@keyframes show{
+    0%{
+        opacity:0
+    }
+    100%{
+        opacity:1;
+    }
+}
+#App-container .App-selector{
+    width:auto;
+    min-width: 100px;
+    height:100%;
+    padding:10px;
+    border-right: 1px solid #157e7e;
+    overflow: scroll;
+}
+
+#App-container .App-selector .app-list{
+    padding:12px;
+    border-radius:8px;
+    margin:4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden
+}
+
+
+#App-container .App-selector .app-list img,#App-container .App-selector .app-list.active img{
+    width:30px;
+    pointer-events: none;
+}
+
+#App-container .App-selector .app-list.active{
+    background:#157e7ebb;
+}
+#App-container .App-selector .app-list:hover{
+    background:#157e7e6c;
+}
+#App-container .App-selector .app-list.active:hover{
+    background:#157e7ebb;
+}
+#current-app-display{
+    /* max-width:100%; */
+    width:95%;
+    height:100%;
+    padding:20px;
+}
+
+.ripple{
+    position:absolute;
+    transform: translate(-50%,-50%);
+    pointer-events: none;
+    border-radius:50%;
+    background:#fff;
+    animation: ripple .8s ease;
+}
+@keyframes ripple{
+    0%{
+        display: block;
+        border-radius: 100%;
+        width:0px;
+        height:0px;
+        opacity: .5;
+    }
+    100%{
+        background:rgba(255, 255, 255, 0.356);
+        width:200px;
+        height:200px;
+        opacity: 0;
+        display:none;
+    }
+}
+
+
+/* CONST STYLES */
+
+
+
+/* TODO APP STYLES */
+
+#TodoApp{
+    display: flex;
+    flex-direction: column;
+    width:100%;
+    overflow-x: hidden;
+}
+
+
+#TodoApp .todo-form-container{
+    width:100%;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+}
+
+#TodoApp .todo-form-container .todo_form{
+    width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin:10px 10px;
+}
+
+#TodoApp .todo-form-container .todo_form input{
+    padding:20px;
+    width:60%;
+    font-size:20px;
+    font-family:poppins;
+    font-weight: 500;
+}
+
+#TodoApp .todo-form-container .todo_form button{
+    padding:20px;
+    font-size: 20px;
+    font-weight: 700;
+    font-family: poppins;
+}
+
+#TodoApp .todos-container-date{
+    display:flex;
+    width:90%;
+    overflow-x: hidden;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:30px;
+    margin-bottom:30px;
+    border-radius: 8px;
+    padding:20px;
+    background: #b1d3ec4f;
+    color:#000;
+    overflow: hidden;
+    position:relative;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 3px 10px 0px;
+    animation:addlist .4s ease;
+}
+
+#TodoApp .todos-container-date .date{
+    position:absolute;
+    left:0;
+    top:0;
+    background:#157e7e;
+    padding:4px;
+    color:#f0f0f0;
+}
+
+#TodoApp .todos-container-date .todos-not-done-container,#TodoApp .todos-container-date .todos-done-container{
+    width:50%;
+    display:flex;
+    flex-direction:column;
+    font-size: 18px;
+    align-items: center;
+}
+#TodoApp .todos-container-date .todo-container-type{
+    font-size:18px;
+    font-weight: 700;
+    color:#157e7e;
+    padding:10px;
+}
+
+#TodoApp .todos-container-date .todo{
+    display: inline;
+    list-style:none;
+    border-radius: 4px;
+    border:.5px solid #1c747475;
+    padding:10px;
+    margin:4px;
+    inline-size: 90%;
+    overflow-wrap: break-word;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    animation:addlist .4s ease;
+}
+
+@keyframes addlist {
+    0%{
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    100%{
+        transform: translateY(0px);
+        opacity:1;
+    }
+}
+
+#TodoApp .todos-container-date .todo .doneIndicator{
+    border-radius: 4px;
+    background: #157e7e3a;
+    padding:5px 8px 5px 8px;
+    margin:4px;
+    cursor: pointer;
+}
+#TodoApp .todos-container-date .todo .doneIndicator.undone:hover{
+    background: #157e7e6b;
+}
+#TodoApp .todos-container-date .todo .doneIndicator.done:hover{
+    background: #8d919271;
+}
+
+#TodoApp .todos-container-date .todo .deleteTodo{
+    border-radius: 4px;
+    background: #92163b3a;
+    padding:5px 8px 5px 8px;
+    margin:4px;
+    cursor: pointer;
+}
+#TodoApp .todos-container-date .todo .deleteTodo:hover{
+    background: #92163b71;
+}
+
+#TodoApp .todos-container-date .todo .deleteTodo img{
+    height:16px;
+    pointer-events: none;
+}
+#TodoApp .todos-container-date .todo .todo-text{
+    inline-size: 80%;
+    text-align: center;
+    overflow-wrap: break-word;
 }
 
 #TodoApp .todo-text.editable{
-    background: #BFACE0;
+    background: #157e7e23;
     outline:none;
+    border-radius: 4px;
 }
 #TodoApp .todo-text.done{
     text-decoration:line-through;
 }
-#TodoApp{
-    display: block;
-    width:100%;
-    height: 100vh;
-    background: #D2DAFF;
-    color:#645CAA;
-}
-/* EBC7E8 , BFACE0 , A084CA , 645CAA */
 
-.note-container{
-    border:1px solid black;
-    margin:20px;
-    padding:20px;
-}
-.note .text-container{
-    padding:5px;
-    margin:5px;
-}
+/* TODO APP STYLES */
 
 
-.week{
+
+
+/* TIMELINE APP STYLES */
+#WeeksToLive .week{
     width:1.140vw;
-    height:12px;
-    border:1px solid #101010;
+    height:1.140vw;
+    border:1px solid #157e7ede;
     display: inline-flex;
     margin: auto;
 }
-.year{
-    width: 70%;
+#WeeksToLive .year{
+    width: 100%;
     overflow: hidden;
     display:flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;  
-    margin-bottom:1.5px;
+    margin-bottom:2.5px;
 }
 
-.lived{
-    background: #101010;
+#WeeksToLive .lived{
+    background: #157e7e75;
+}
+
+#WeeksToLive .week.living{
+    animation: living 2s linear infinite;
+}
+@keyframes living{
+    0%{
+        background: #157e7e75;
+    }
+    50%{
+        background: transparent;
+    }
+    100%{
+        background: #157e7e75;
+    }
 }
 
 
-.hovered-week-info.hidden{
+
+#WeeksToLive input,button{
+    font-family: poppins;
+    margin:5px;
+}
+
+#WeeksToLive .info{
+    padding:20px;
+    font-size: 16px;
+    font-family: poppins;
+}
+
+#WeeksToLive #weeks-to-live-form{
+    display:flex;
+    width:100%;
+    align-items: center;
+    justify-content:center;
+}
+
+#WeeksToLive .time-line-weeks-left-info{
+    width:90%;
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+}
+#WeeksToLive .flex{
+    width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+#WeeksToLive .weeks-passed,#WeeksToLive .weeks-death{
+    background: #b1d3ec4f;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 3px 10px 0px;
+    border-radius:10px;
+    padding:10px;
+}
+#WeeksToLive .time-line-weeks-left-info .weeks-lived{
+    font-size:130%;
+}
+
+#WeeksToLive .hovered-week-info.hidden{
     display: none;
 }
 
-.hovered-week-info{
+#WeeksToLive .hovered-week-info{
     position:absolute;
     background:#f0f0f0;
     transition: all .1s ease;
@@ -80,31 +624,343 @@ body{
     position: fixed;
 }
 
-.weeks-container{
-    width: 100%;
+#WeeksToLive .weeks-container{
+    width: 90%;
     overflow: hidden;
     display:flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     position: relative;
-}
-.note{
-    display:none;
-}
-.note.popup{
-    display:block;
+    background: #b1d3ec4f;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 3px 10px 0px;
+    padding:30px;
+    border-radius: 10px;
 }
 
-.note-list-container{
+/* TIMELINE APP STYLES */
+
+
+/* GOALS APP STYLES */
+
+#GoalsApp .goal{
+    display: inline;
+    list-style:none;
+    border-radius: 4px;
+    border:.5px solid #1c747475;
     padding:10px;
-    margin:10px;
+    margin:4px;
+    margin-left: auto;
+    margin-right: auto;
+    inline-size: 90%;
+    overflow-wrap: break-word;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    animation:addlist .4s ease;
 }
 
-.note .note-heading{
-    font-size:30px;
+#GoalsApp  .goal .deleteGoal{
+    border-radius: 4px;
+    background: #92163b3a;
+    padding:5px 8px;
+    margin:4px;
+    cursor: pointer;
+}
+#GoalsApp  .goal .deleteGoal:hover{
+    background: #92163b71;
 }
 
-.future-letter-input-div{
-    border:1px solid #101010;
+#GoalsApp .goal .deleteGoal img{
+    height:18px;
+    pointer-events: none;
 }
+#GoalsApp .goal .goal-name{
+    inline-size: 80%;
+    text-align: center;
+    overflow-wrap: break-word;
+    font-size: 18px;
+}
+/* #GoalsApp  */
+
+
+#GoalsApp .goal .doneIndicator{
+    border-radius: 4px;
+    background: #157e7e3a;
+    padding:5px 8px 5px 8px;
+    margin:4px;
+    cursor: pointer;
+}
+#GoalsApp .goal .doneIndicator.undone:hover{
+    background: #157e7e6b;
+}
+#GoalsApp .goal .doneIndicator.done:hover{
+    background: #8d919271;
+}
+#GoalsApp .goals-display{
+    position: relative;
+    overflow: hidden;
+    animation:addlist .4s ease;
+}
+#GoalsApp .goals-display .date{
+    position:absolute;
+    left:0;
+    top:0;
+    background:#157e7e;
+    padding:4px;
+    color:#f0f0f0;
+}
+#GoalsApp .goals-form input{
+    padding: 20px;
+    width: 60%;
+    font-size: 20px;
+    font-family: poppins;
+    font-weight: 500;
+}
+
+#GoalsApp .goals-form button{
+    padding:20px;
+    font-size: 20px;
+    font-weight: 700;
+    font-family: poppins;
+}
+
+#GoalsApp .goals-form form{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 10px;
+}
+
+
+#GoalsApp .goals-type select{
+    font-family: poppins;
+    padding:20px;
+    font-size:20px;
+    background: #157e7e23;
+}
+
+
+#GoalsApp #type option{
+    background: #157e7e23;
+}
+
+/* GOALS APP */
+
+
+
+
+
+
+/* NOTES APP */
+
+
+/* #NotesApp .notes-flex-container{
+    width:100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+} */
+#NotesApp  .note{
+    display: none;
+    opacity: 0;
+    width:80%;
+    position: absolute;
+    left:10%;
+    top:10%;
+    /* bottom:10%; */
+    max-height: 80vh;
+    right:10%;
+    height:auto;
+    overflow-y:scroll;
+    pointer-events: none;
+    background:#cce6eb;
+    border-radius: 10px;
+    padding:20px;
+    color:#000;
+    animation: popout .2s ease;
+}
+#NotesApp  .note .note-text-container{
+    padding:10px;
+}
+#NotesApp  .note .note-text-container li{
+    margin-left: 40px;
+}
+#NotesApp  .note .note-text-container .note-heading{
+    font-size:24px;
+}
+#NotesApp  .note .note-text-container .note-content{
+    font-size:18px;
+    opacity: .9;
+}
+#NotesApp  .note .note-text-container .text-container{
+    margin:5px 0px;
+    padding:10px;
+}
+
+#NotesApp .note-tools-container {
+    display: flex;
+    align-items: center;
+    flex-direction:row;
+    justify-content: space-between;
+    padding:5px;
+}
+
+.note .note-contents-container{
+    position: relative;
+    padding:10px;
+    max-height: 65vh;
+    overflow: scroll;
+}
+
+#NotesApp .note-tools {
+    display: flex;
+    align-items: center;
+}
+
+#NotesApp .note-tools img{
+    height: 18px;
+}
+#NotesApp  .note .note-close img{
+    height: 18px;
+}
+
+#NotesApp  .note .image-input{
+    border: none;
+    font-size: 18px;
+    background:transparent;
+    color:#000;
+    padding:6px;
+    cursor:pointer;
+    border-radius: 4px;
+    width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+#NotesApp  .note .image-input + label , #NotesApp  .note button , #NotesApp  .note .note-close{
+    padding:6px;
+    cursor:pointer;
+    border-radius: 4px;
+    font-size: 18px;
+    display: inline-block;
+    cursor:pointer;
+    color:#000;
+    border: none;
+    background:#157e7e25;
+}
+
+#NotesApp  .note .image-input + label:hover , #NotesApp  .note button:hover , #NotesApp  .note .note-close:hover{
+    background:#157e7e4d;
+}
+#NotesApp .note.popup{
+    display: block;
+    opacity: 1;
+    pointer-events:all;
+    animation:popup .3s ease;
+}
+@keyframes popup{
+    0%{
+        top:20%;
+        opacity: 0;
+    }
+    100%{
+        top:10%;
+        opacity: 1;
+    }
+}
+
+@keyframes popout{
+    0%{
+        top:10%;
+        display: block;
+        opacity: 1;
+    }
+    100%{
+        display: none;
+        top:20%;
+        opacity: 0;
+    }
+}
+
+#NotesApp .notes-flex-container{
+    width: 100%;
+    margin: 0 auto;
+}
+#NotesApp .notes-flex-container .note-container{
+    width: 30%;
+    overflow: hidden;
+    height: auto;
+    margin:1.5%;
+    background:#cce6eb;
+    border-radius: 8px;
+    color:#000;
+    border: .4px solid #157e7e50;
+    transition:all .2s ease;
+}
+#NotesApp .note-preview{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:100%; 
+    flex-direction: column;
+    cursor:pointer;
+    overflow: hidden;   
+    padding:20px;
+}
+#NotesApp .note-container:hover{
+    border: 1px solid #157e7e;
+    background:#bce1e9;
+    box-shadow: rgba(99, 99, 99, 0.19) 0px 3px 10px 0px;
+}
+#NotesApp .note-preview .Heading{
+    font-size: 18px;
+    inline-size: 90%;
+    overflow-wrap: break-word;
+    padding:4px;
+}
+
+#NotesApp .note-preview .Content{
+    font-size: 16px;
+    inline-size: 90%;
+    opacity: .86;
+    overflow-wrap: break-word;
+    padding:4px;
+}
+
+#NotesApp .note-container .note-info{
+    opacity: 1;
+    font-size: 14px;
+    padding:8px;
+    border-top:.1px solid #157e7e;
+    background:#157e7e10;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 3px 10px 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#NotesApp .note-container .note-info span{
+    opacity:.92;
+}
+#NotesApp .note-container .delete-note{
+    padding:6px;
+    cursor:pointer;
+    border-radius: 4px;
+}
+
+#NotesApp .note-container:hover .delete-note:hover{
+    background:#157e7e28;
+    opacity: 1
+}
+
+#NotesApp .notes-container{
+    margin:40px 0px;
+    padding:5px;
+}
+
+/* NOTES APP */

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 export default function WeeksToLiveData(props) {
 
     const [hoverdata, sethoverdata] = useState({ year: 0, week: 0 });
+    const averagelifespan = 73;
+    const totalweeks = averagelifespan * 52;
 
     useEffect(() => {
         var allweeks = document.getElementsByClassName('week');
@@ -11,13 +13,10 @@ export default function WeeksToLiveData(props) {
             }
             for (var i = 0; i < props.weeksToLive; i++) {
                 allweeks[i].classList.add('lived');
+                allweeks[props.weeksToLive].classList.add('living');
             }
         }
         weeks();
-
-        setInterval(() => {
-            weeks();
-        }, 10000000);
     }, [props.weeksToLive]);
 
     var weekinfocontent = null;
@@ -26,10 +25,7 @@ export default function WeeksToLiveData(props) {
     }
 
     function weekinfoposition(e) {
-        weekinfocontent.classList.add('hidden');
-        if (e.target.classList[0] == 'week' || e.target.classList[0] == 'weeks-container') {
-            weekinfocontent.classList.remove('hidden');
-        }
+        weekinfocontent.classList.remove('hidden');
     }
 
     function showWeekInfo(e) {
@@ -40,32 +36,80 @@ export default function WeeksToLiveData(props) {
         null,
         React.createElement(
             'div',
-            { className: 'weeks-container', onMouseMove: weekinfoposition },
-            Array.from(Array(73), (e, i) => {
-                return React.createElement(
-                    'div',
-                    { className: 'year', key: i, 'data-number': i },
-                    Array.from(Array(52), (e, i) => {
-                        return React.createElement('div', { className: 'week', key: i + 1, 'data-number': i + 1, onMouseOver: showWeekInfo });
-                    })
-                );
-            }),
+            { className: 'flex' },
+            React.createElement(TimeLineWeeksLeftInfo, { weeksToLive: props.weeksToLiveDecimal, weeksToLiveWhole: props.weeksToLive, totalweeks: totalweeks }),
             React.createElement(
                 'div',
-                { className: 'hovered-week-info', ref: weekinfo },
+                { className: 'weeks-container padding-30', onMouseMove: weekinfoposition },
+                Array.from(Array(averagelifespan), (e, i) => {
+                    return React.createElement(
+                        'div',
+                        { className: 'year', key: i, 'data-number': i },
+                        Array.from(Array(52), (e, i) => {
+                            return React.createElement('div', { className: 'week', key: i + 1, 'data-number': i + 1, onMouseOver: showWeekInfo });
+                        })
+                    );
+                }),
                 React.createElement(
                     'div',
-                    { className: 'year-info' },
-                    ' Year: ',
-                    hoverdata.year,
-                    ' '
+                    { className: 'hovered-week-info', ref: weekinfo },
+                    React.createElement(
+                        'div',
+                        { className: 'year-info' },
+                        ' Year: ',
+                        hoverdata.year,
+                        ' '
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'week-info' },
+                        ' Week: ',
+                        hoverdata.week,
+                        ' '
+                    )
+                )
+            ),
+            React.createElement('div', { className: 'timeline-info-container' })
+        )
+    );
+}
+
+function TimeLineWeeksLeftInfo(props) {
+    return React.createElement(
+        React.Fragment,
+        null,
+        React.createElement(
+            'div',
+            { className: 'flex' },
+            React.createElement(
+                'div',
+                { className: 'info time-line-weeks-left-info padding-20' },
+                React.createElement(
+                    'div',
+                    { className: 'weeks-passed padding-10' },
+                    'Weeks Lived : ',
+                    React.createElement(
+                        'span',
+                        { className: 'weeks-lived' },
+                        props.weeksToLive
+                    ),
+                    React.createElement(
+                        'span',
+                        null,
+                        '/',
+                        props.totalweeks
+                    )
                 ),
                 React.createElement(
                     'div',
-                    { className: 'week-info' },
-                    ' Week: ',
-                    hoverdata.week,
-                    ' '
+                    { className: 'weeks-death  padding-10' },
+                    'Death in : ',
+                    React.createElement(
+                        'span',
+                        null,
+                        (props.totalweeks - props.weeksToLive).toString().slice(0, props.weeksToLiveWhole.toString().length + 5)
+                    ),
+                    ' weeks'
                 )
             )
         )

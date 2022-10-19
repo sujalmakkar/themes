@@ -96,6 +96,22 @@ Router.get('/goals',auth,async(req,res)=>{
     }
 })
 
+Router.get('/letters',auth,async(req,res)=>{
+    if(req.authenticated){
+        var inserted = await DB.collection('productivity').findOne({uid:req.uid},{projection:{allletters:1,_id:0}})
+        var duedates = []
+        inserted.allletters.map(e=>duedates.push(e.date))
+        var data = {
+            number:duedates.length,
+            duedates:duedates
+        }
+        if(inserted!=null){
+            res.json(data)
+        }
+    }else{
+        res.json({message:'no user logged In',status:301})
+    }
+})
 
 
 module.exports = Router

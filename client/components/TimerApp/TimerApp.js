@@ -15,7 +15,7 @@ class TimerApp extends React.Component {
     render() {
         return React.createElement(
             'div',
-            { id: 'TimerApp' },
+            { id: 'TimerApp', className: 'app' },
             React.createElement(Timer, { addLog: this.addLog }),
             React.createElement(Timer, { addLog: this.addLog }),
             React.createElement(TimerLogsDisplay, { logs: this.state.logs })

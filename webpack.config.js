@@ -12,4 +12,17 @@ module.exports = {
         static: 'client',
         hot:true,
         },
+        module: {
+            rules: [
+                {
+                  test: /\.(glsl|vs|fs|vert|frag)$/,
+                  exclude: /node_modules/,
+                  use: [
+                    'raw-loader',
+                    'glslify-loader'
+                  ]
+                }
+              ]
+        }
+  
    };

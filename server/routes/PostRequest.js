@@ -18,13 +18,10 @@ Router.use(bodyParser.json())
 
 // ADDING A DEADLINE
 
-Router.post('/deadline',auth,async(req,res)=>{
+Router.post('/newdeadline',auth,async(req,res)=>{
     if(req.authenticated){
-        var all_deadlines = req.body.deadLines
-        // console.log(all_deadlines)
-        var length = all_deadlines.deadlines.length
-        console.log((all_deadlines.deadlines[length-1].reminder+86400000)-Date.now())
-        var inserted = await DB.collection('productivity').updateOne({uid:req.uid},{$set :{alldeadlines:all_deadlines}})
+        var deadline = req.body
+        var inserted = await DB.collection('productivity').updateOne({uid:req.uid},{$push :{alldeadlines:deadline}})
         console.log(inserted)
         if(inserted!=null){
             res.json({'message':'updated!'})
@@ -44,7 +41,7 @@ Router.post('/todo',auth,async(req,res)=>{
             date:todo.date,
             done:todo.done==='true'?true:false,
             text:todo.text,
-            id:todo.id
+            id:parseInt(todo.id)
         }
         console.log(todo.done,newtodo.done)
         var exists = await DB.collection('productivity').findOne({uid:req.uid,alltodos:{$elemMatch:{date:todo.date}}},{projection:{'alltodos.todos.$': 1 , _id: 0}})
@@ -65,6 +62,40 @@ Router.post('/todo',auth,async(req,res)=>{
         res.json({message:'no user logged In'})
     }
 })
+
+//DELETING A TODO 
+Router.post('/tododel',auth,async(req,res)=>{
+    if(req.authenticated){
+        var todo = req.body
+
+        var inserted = await DB.collection('productivity').updateOne({uid:req.uid},{
+            $pull:{
+                [`alltodos.$[date].todos`]:{id:parseInt(todo.id)}
+            }},{
+                "arrayFilters": [
+                    {"date.date" : todo.date},
+                ]
+        })
+        console.log(inserted)
+        if(inserted.modifiedCount!=0){
+            res.json({'message':'updated!'})
+        }else{
+            res.json({'message':'error happened!'})
+        }
+
+        //delete the date array if it is empty
+        var empty = await DB.collection('productivity').findOne({uid:req.uid,alltodos:{$elemMatch:{date:todo.date}}},{projection:{'alltodos.todos.$': 1 , _id: 0}})
+        if(empty.alltodos[0].todos.length==0){
+            var inserted = await DB.collection('productivity').updateOne({uid:req.uid},{
+                $pull:{
+                    alltodos:{date:todo.date}
+                }})
+        }
+    }else{
+        res.json({message:'no user logged In'})
+    }
+})
+
 
 
 // ADDING A NEW TODO
@@ -135,6 +166,24 @@ Router.post('/notes/new',auth,async(req,res)=>{
     }
 })
 
+//DELETING A NOTE
+
+Router.post('/notes/delete',auth,async(req,res)=>{
+    if(req.authenticated){
+        var note = req.body 
+        var inserted = await DB.collection('productivity').updateOne({uid:req.uid},{$pull :{allnotes:{id:parseInt(note.id)}}})
+        
+        console.log(inserted)
+        if(inserted!=null){
+            res.json({'message':'updated!'})
+        }else{
+            res.json({'message':'not Updated'})
+        }
+    }else{
+        res.json({message:'no user logged In'})
+    }
+})
+
 // ADDING A NEW GOAL
 
 Router.post('/newgoal',auth,async(req,res)=>{
@@ -143,7 +192,7 @@ Router.post('/newgoal',auth,async(req,res)=>{
         console.log(goal,'goal')
         var type = req.body.type
         var typewithouts = type.slice(0,-1)
-        var number = req.body.number
+        var number = (req.body.number).toString()
         var inserted = await DB.collection('productivity').findOne({uid:req.uid},{projection:{allgoals:1,_id:0}})
         var dateexists = inserted.allgoals[type].filter(a=>a.year||a.month||a.week==number)
         console.log(dateexists)
@@ -172,22 +221,90 @@ Router.post('/newgoal',auth,async(req,res)=>{
 
 
 
+
+//EDITING A GOAL
+
+Router.post('/goal',auth,async(req,res)=>{
+
+    if(req.authenticated){
+        var goal = req.body
+        var type = req.body.type
+        var newgoal= {
+            created:goal.created,
+            type:goal.type,
+            number:goal.number,
+            done:goal.done==='true'?true:false,
+            text:goal.text?goal.text:'untitled',
+            id:parseInt(goal.id)
+        }
+        console.log(goal,newgoal)
+        var exists = await DB.collection('productivity').findOne({uid:req.uid},{projection:{[`allgoals`]: 1 , _id: 0}})
+        var typenumber = exists.allgoals[type].findIndex(a=> a.week||a.year||a.month==goal.number)
+        
+        var index = exists.allgoals[type][typenumber].goals.findIndex(a=>a.id==goal.id)
+        
+
+        var inserted = await DB.collection('productivity').updateOne({uid:req.uid},{$set:{[`allgoals.${type}.${typenumber}.goals.${index}`]:newgoal}})
+        console.log(inserted)
+        if(inserted.modifiedCount!=0){
+            res.json({'message':'updated!'})
+        }else{
+            res.json({'message':'error happened!'})
+        }
+    }else{
+        res.json({message:'no user logged In'})
+    }
+})
+
+
+//DELETING A GOAL
+
+Router.post('/delgoal',auth,async(req,res)=>{
+
+    if(req.authenticated){
+        var goal = req.body
+        var type = req.body.type
+        var typewithouts = type.slice(0,-1)
+
+        var exists = await DB.collection('productivity').findOne({uid:req.uid},{projection:{[`allgoals`]: 1 , _id: 0}})
+        var typenumber = exists.allgoals[type].findIndex(a=> a.week||a.year||a.month==goal.number)
+        
+
+        var inserted = await DB.collection('productivity').updateOne({uid:req.uid},{$pull:{[`allgoals.${type}.${typenumber}.goals`]:{id:parseInt(goal.id)}}})
+        console.log(inserted)
+        if(inserted.modifiedCount!=0){
+            res.json({'message':'updated!'})
+        }else{
+            res.json({'message':'error happened!'})
+        }
+
+        if(exists.allgoals[type][typenumber].goals.length<2){
+            var inserted = await DB.collection('productivity').updateOne({uid:req.uid},{
+                $pull:{
+                    [`allgoals.${type}`]:{[typewithouts]:goal.number}
+                }})
+        }
+
+
+    }else{
+        res.json({message:'no user logged In'})
+    }
+})
+
+
+
 // ADD A NEW LETTER
 
 Router.post('/newLetter',auth,async(req,res)=>{
     if(req.authenticated){
         var data = req.body
-        var now = Date.now()
-        // var currentTime = Date.now()
-        // var timeRema?iningInSeconds = parseInt((((props.dueTime+86400000) - currentTime).toString()).slice(0,-3))
-        console.log(data.reminder-now)
-        console.log(data)
-        // var inserted = await DB.collection('productivity').updateOne({uid:req.uid},{$push :{allletters:data}})
-        // console.log(inserted)
-        // if(inserted!=null){
-            // res.json({'message':'updated!'})
-        // }
-            res.json({'message':'u'})
+        var inserted = await DB.collection('productivity').updateOne({uid:req.uid},{$push :{allletters:data}})
+        console.log(inserted)
+        if(inserted!=null){
+            res.json({'message':'updated!'})
+        }else{
+            res.json({'message':'did not update'})
+        }
     }else{
         res.json({message:'no user logged In'})
     }

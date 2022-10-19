@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import randomNumber from '../../../server/functions/randomNumber';
-
+import GoalsType from './GoalsType'
 export default function GoalsForm(props){
     const [data,setdata] = useState()
 
@@ -22,14 +22,16 @@ export default function GoalsForm(props){
         }
 
         props.addGoal(json)
+        setdata('')
     }
     function handleInput(e){
         setdata(e.target.value)
     }
     return(
-        <div className='goals-form'>
+        <div className='goals-form flex'>
             <form onSubmit={handleFormSubmit}>
-                <input type="text" onChange={handleInput}/>
+                <input placeholder={props.selectedTime=='years'?'Earn $100,000+':props.selectedTime=='months'?'Invest more than $2000':'Start a Youtube Channel'} type="text" value={data} onChange={handleInput} required/>
+                <GoalsType changeType={props.changeType}></GoalsType>
                 <button type="submit">Add Goal</button>
             </form>
         </div>
