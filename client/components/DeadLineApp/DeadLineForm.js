@@ -19,21 +19,25 @@ export default function DeadLineForm(props) {
         var dueDateArray = data.target.due.value.split('-');
         var dueTime = new Date(dueDateArray[1] + '/' + dueDateArray[2] + '/' + dueDateArray[0]).getTime() + 86400000;
         var ranNumber = randomNumber(10);
-        console.log(Date.now());
-        props.addDeadLine({ name: name, reminder: dueTime, id: ranNumber, dueTime: dueTime, dueDate: data.target.due.value });
+        setname('');
+        props.addDeadLine({ name: name, reminder: dueTime, id: ranNumber, dueTime: dueTime, dueDate: data.target.due.value, pinned: false });
     }
     function setDeadLineName(e) {
         setname(e.target.value);
     }
     return React.createElement(
-        'form',
-        { onSubmit: addDeadLine },
-        React.createElement('input', { name: 'deadline', onChange: setDeadLineName, placeholder: 'name', type: 'text', required: true }),
-        React.createElement('input', { name: 'due', type: 'date', ref: dateInputRef, required: true }),
+        'div',
+        { className: 'deadline-form' },
         React.createElement(
-            'button',
-            { type: 'submit' },
-            'Add Deadline'
+            'form',
+            { onSubmit: addDeadLine },
+            React.createElement('input', { name: 'deadline', maxLength: 200, value: name, onChange: setDeadLineName, placeholder: 'title', type: 'text', required: true }),
+            React.createElement('input', { name: 'due', type: 'date', ref: dateInputRef, required: true }),
+            React.createElement(
+                'button',
+                { type: 'submit' },
+                'Add Deadline'
+            )
         )
     );
 }

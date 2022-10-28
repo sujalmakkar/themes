@@ -5,7 +5,8 @@ import {io} from 'socket.io-client'
 
 var socket = io('http://localhost:3000')
         socket.on('connect',()=>{
-            console.log('connected')
+            
+            null
 })
 
 
@@ -20,24 +21,30 @@ export default function Note(props){
     useEffect(()=>{
 
         if(fetchstate.current){
-            fetch(`/getData/note/${props.id}`,{
-                method:'GET',
-                headers:{'content-Type':'application/json'}            
-            }).then(res=>res.json()).then(result=>{
+            try{
+                fetch(`./getData/note/${props.id}`,{
+                    method:'GET',
+                    headers:{'content-Type':'application/json'}            
+                }).then(res=>res.json()).then(result=>{
+    
 
-                console.log(result)
-
-                setcontentdata(result?result[0]?result[0].data.content:'Content Here!':'Content Here!')
-                setheadingdata(result?result[0]?result[0].data.heading:'Heading here!':'Heading here!')
-
-                Heading.innerHTML= result?result[0].data.heading:'Heading here!'
-                Content.innerHTML= result?result[0].data.content:'Content Here!'
-
-            })   
+    
+                    setcontentdata(result?result[0]?result[0].data?result[0].data.content:'Content Here!':'Content Here!':'Content Here!')
+                    setheadingdata(result?result[0]?result[0].data?result[0].data.heading:'Heading here!':'Heading here!':'Heading here!')
+    
+                    Heading.innerHTML= result?result[0]?result[0].data?result[0].data.heading:'Heading here!':'Heading here!':'Heading here!'
+                    Content.innerHTML= result?result[0]?result[0].data?result[0].data.content:'Content Here!':'Content Here!':'Content Here!'
+    
+                })   
+            }catch(err){
+                console.log(err)
+            }finally{
+                Heading.innerHTML= 'Heading here!'
+                Content.innerHTML= 'Content Here!'
+            }
             return () =>{
                 fetchstate.current = false
             }
-
         } 
     },[])
 

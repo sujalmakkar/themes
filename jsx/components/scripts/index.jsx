@@ -1,90 +1,115 @@
-import Gl from './gl';
 import Blob from './gl/Blob';
-import * as dat from 'dat.gui';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import * as THREE from 'three';
+import pscore from '../scripts/score'
+import workstatus from '../scripts/workstatus'
 
-// import gsap from 'gsap';
 
-export default class App {
-  constructor() {
-    this.blobs = [];
-    this.addBlobs();
+export default function app(){
+  var camera2;
+  var blob1;
+  var canvas = document.querySelector('canvas#webgl-blob')
 
-    // Main animation tl
-    // this.tl = gsap.timeline({
-    //   delay: 0.25,
-    // });
+  if(canvas){
+      
+    var scene = new THREE.Scene()
 
-    // this.tl
-    //   .add(this.article())
-    //   .add(this.animBlobs(), '-=1.5');
-  }
+    var renderer = new THREE.WebGLRenderer({
+        canvas:canvas,
+        alpha:true
+    })
 
-  addBlobs() {
-    // size, speed, color, freq, density, strength, offset
-    // const blob1 = new Blob(1.75, 0.3, 0.5, 0.3, 0.12, Math.PI * 1);  
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(((window.innerWidth*70/100)),(window.innerHeight*70/100));
 
-    var options = {
-      velx: 0,
-      vely: 0,
-      camera: {
-        speed: 0.0001
-      },
-      stop: function() {
-        this.velx = 0;
-        this.vely = 0;
-      },
-      reset: function() {
-        this.velx = 0.1;
-        this.vely = 0.1;
-        camera.position.z = 75;
-        camera.position.x = 0;
-        camera.position.y = 0;
-        cube.scale.x = 1;
-        cube.scale.y = 1;
-        cube.scale.z = 1;
-        cube.material.wireframe = true;
-      }
-    };
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.25;
+    renderer.setClearColor(0x000000, 0);
+    renderer.shadowMap.enabled = true;
+
+        window.addEventListener('load', function() {
+        camera2.aspect = (window.innerWidth*70/100) / (window.innerHeight*70/100);
+        camera2.updateProjectionMatrix();
+        renderer.setSize((window.innerWidth*70/100), (window.innerHeight*70/100));
+
+  }, false);
+
+  window.addEventListener('resize', function() {
+
+      camera2.aspect = (window.innerWidth*70/100) / (window.innerHeight*80/100);
+      camera2.updateProjectionMatrix();
+      renderer.setSize((window.innerWidth*70/100), (window.innerHeight*80/100));
+      controls = new OrbitControls( camera2, renderer.domElement );
+      controls.enableDamping = true;
+      controls.dampingFactor = .02;
+      controls.enableZoom = false;
+      controls.enablePan = false;
+      controls.screenSpacePanning = false; 
     
-    
-    var gui = new dat.GUI();
+}, false);
 
-    var cam = gui.addFolder('Camera');
-    cam.add(options.camera, 'speed', 0, 0.0010).listen();
-    cam.add(camera.position, 'y', 0, 100).listen();
-    cam.open();  
 
-  
-    const blob2 = new Blob(6.0, 0.15, .4, .2, 0.3, Math.PI * 1);   
-    // const blob3 = new Blob(0.8, 0.5, 1, 4, 0.05, Math.PI * 0.5);    
+    camera2 = new THREE.PerspectiveCamera(45,((window.innerWidth*80/100))/(window.innerHeight*80/100),0.1,1000)
 
-    // blob1.position.set(-8.5, 3.25, 2);
-    blob2.position.set(11, -3, -10);
-    // blob3.position.set(-1, -4, 4);
+    blob1 = new Blob(2, .5, .5, 0, 0.15, Math.PI * 1);    
 
-    // blob1.rotation.set(-0.4, 0, 0.5);
-    blob2.rotation.set(0.4, 1.0, -0.4);
-    // blob3.rotation.set(0, 0, 0);
 
-    // this.blobs = [ blob2 ];
-    
-    Gl.scene.add(blob2);
-    var render = function() {
+    blob1.position.set(0, 0, 0);
 
-      requestAnimationFrame(render);
+    blob1.rotation.set(-0.4, 0, 0.5);
+
+    camera2.position.set(1,0,-8)
+
+    camera2.rotation.set(-0.02,2.89,0)
+
+    scene.add(camera2)
+    scene.add(blob1)
     
-      var timer = Date.now() * options.camera.speed;
-      camera.position.x = Math.cos(timer) * 100;
-      camera.position.z = Math.sin(timer) * 100;
-      camera.lookAt(scene.position); 
-      camera.updateMatrixWorld();
-    
-      cube.rotation.x += options.velx;
-      cube.rotation.y += options.vely;
-    
-      renderer.render(scene, camera);
-    
-    };
-    render();
+
+    var controls = new OrbitControls( camera2, renderer.domElement ); 
+
+    controls.enableDamping = true;
+    controls.dampingFactor = .02;
+    controls.enableZoom = false;
+    controls.enablePan = false;
+    controls.screenSpacePanning = false;
+
+
+    var tofetch = false
+    setInterval(()=>{
+      tofetch = true
+    },500)
+    var currentvalue = 0 
+    var minvalue = 1
+    var time = .1
+    var timespeed = 0.0001
+
+    function animate(){
+        time+= timespeed
+      
+        if(tofetch){
+          currentvalue = pscore(0,0)
+          var status = workstatus()
+          if(status){
+            timespeed =0.01
+          }else{
+            timespeed =0.002
+          }
+          tofetch=false
+        }
+        
+        blob1.mesh.material.uniforms.uTime.value = time*0.5;
+        blob1.mesh.material.uniforms.uNoiseDensity.value = (minvalue+(currentvalue*.1))*.4
+        
+        controls.update();
+
+        requestAnimationFrame(animate)
+
+        renderer.render(scene,camera2)
+    }
+
+    animate()
+  }else{
+    null
   }
 }

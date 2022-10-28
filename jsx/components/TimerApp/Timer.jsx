@@ -6,6 +6,7 @@ export default function Timer(props){
 
     const [time,setTime] = useState({seconds:'00',minutes:'00',hours:'00'})
     const [taskName,settaskName] = useState('')
+    const [input,setinput] = useState(true)
 
     function setTimer(e){
         setTime(e)
@@ -14,14 +15,17 @@ export default function Timer(props){
         settaskName(e)
     }
     function timerLogs(e){
+        e.timeset = time.hours+':'+time.minutes+':'+time.seconds
         props.addLog(e)
+    }
+    function disableInput(e){
+        setinput(e)
     }
 
     return (
         <React.Fragment>
-        <h1>This is a Timer</h1>
-        <TimerDisplay time={time} name={taskName} timerLogs={timerLogs}/>
-        <TimerForm setTimer={setTimer} setName={setName}  />
+            <TimerForm setTimer={setTimer} setName={setName} display={input} />
+            <TimerDisplay time={time} name={taskName} timerLogs={timerLogs} disableInput={disableInput}/>
         </React.Fragment>
     )
 }

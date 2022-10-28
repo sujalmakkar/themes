@@ -83,14 +83,14 @@ function TimeLineWeeksLeftInfo(props) {
             { className: 'flex' },
             React.createElement(
                 'div',
-                { className: 'info time-line-weeks-left-info padding-20' },
+                { className: 'info time-line-weeks-left-info padding-20 color-heading' },
                 React.createElement(
                     'div',
-                    { className: 'weeks-passed padding-10' },
+                    { className: 'weeks-passed padding-10 color-heading' },
                     'Weeks Lived : ',
                     React.createElement(
                         'span',
-                        { className: 'weeks-lived' },
+                        { className: 'weeks-lived color-heading' },
                         props.weeksToLive
                     ),
                     React.createElement(
@@ -102,11 +102,11 @@ function TimeLineWeeksLeftInfo(props) {
                 ),
                 React.createElement(
                     'div',
-                    { className: 'weeks-death  padding-10' },
+                    { className: 'weeks-death  padding-10 color-heading' },
                     'Death in : ',
                     React.createElement(
                         'span',
-                        null,
+                        { className: 'color-heading' },
                         (props.totalweeks - props.weeksToLive).toString().slice(0, props.weeksToLiveWhole.toString().length + 5)
                     ),
                     ' weeks'

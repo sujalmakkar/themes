@@ -15,6 +15,7 @@ class NotesApp extends React.Component {
         this.setNewHeading = this.setNewHeading.bind(this)
         this.setNewContent = this.setNewContent.bind(this)
         this.deleteNote = this.deleteNote.bind(this)
+        this.pinNote = this.pinNote.bind(this)
     }
     addLog(info){
         var logscopy = this.state.logs
@@ -23,7 +24,7 @@ class NotesApp extends React.Component {
     }
     componentDidMount(){
 
-        fetch('/getData/notes',{
+        fetch('./getData/notes',{
             method:'GET',
             headers:{'Content-Type':'Application/json'},
         }).then(res=>res.json()).then(result=>{
@@ -33,7 +34,11 @@ class NotesApp extends React.Component {
 
             setTimeout(()=>{
                 $(function(){
-                    $('.notes-flex-container').masonry({
+                    $('.notes-flex-container.pinned').masonry({
+                        itemSelector: '.note-container',
+                        isAnimated: true
+                      });
+                      $('.notes-flex-container.unpinned').masonry({
                         itemSelector: '.note-container',
                         isAnimated: true
                       });
@@ -49,12 +54,13 @@ class NotesApp extends React.Component {
         var info = {
             id:id,
             dateCreated:todayDate,
+            pinned:false,
             data:{heading:'Heading here!',content:'Content here!'}
         }
         var statecopy = this.state.notes
         statecopy.unshift(info)
         
-        fetch('/postData/notes/new',{
+        fetch('./postData/notes/new',{
             method:'POST',
             headers:{'Content-Type':'Application/json'},
             body:JSON.stringify(info)
@@ -63,13 +69,19 @@ class NotesApp extends React.Component {
         this.setState({notes:statecopy})
 
         this.setState({currentNoteId:id})
+
     }
     componentDidUpdate(){
         $(function(){
-          new Masonry( '.notes-flex-container', { 
-            itemSelector: '.note-container',
-            isAnimated: true
-          })
+            new Masonry( '.notes-flex-container.pinned', { 
+                itemSelector: '.note-container',
+                isAnimated: true
+            })
+    
+            new Masonry( '.notes-flex-container.unpinned', { 
+                itemSelector: '.note-container',
+                isAnimated: true
+            })
         })
     }
     noteId(e){
@@ -103,7 +115,27 @@ class NotesApp extends React.Component {
 
         this.setState({notes:statecopy})
 
-        fetch('/postData/notes/delete',{
+        fetch('./postData/notes/delete',{
+            method:'POST',
+            headers:{'Content-Type':'Application/json'},
+            body:JSON.stringify(data)
+        }).then(res=>res.json()).then(result=>console.log(result)).catch(err=>console.log(err))
+    }
+
+    pinNote(e){
+        var statecopy = this.state.notes
+        var index = statecopy.findIndex(a=>a.id == e)
+
+        var data = {
+            id : e,
+            pinned:!statecopy[index].pinned
+        };
+
+        statecopy[index].pinned = !statecopy[index].pinned
+
+        this.setState({notes:statecopy})
+
+        fetch('./postData/notes/pin',{
             method:'POST',
             headers:{'Content-Type':'Application/json'},
             body:JSON.stringify(data)
@@ -113,12 +145,25 @@ class NotesApp extends React.Component {
         return(
             <React.StrictMode>
             <div id="NotesApp" className='app'>
-                Notes App
+                <div className="app-heading">
+                    <div>Your Notes</div>
+                    <span>Keep a copy of your thoughts</span>
+                </div>
+                
                 <button type="button" onClick={this.addNote}>Create New Note + </button>
                 <div className="notes-container">
-                    <div className='notes-flex-container'>
+                    <div className='notes-flex-container pinned'>
                         {this.state.notes.length>0 ? this.state.notes.map(info=>
-                            <NotesContainer id={info.id} created={info.dateCreated} key={info.id} content={info.data.content.slice(0,200)} heading={info.data.heading.slice(0,200)} noteId={this.noteId} deleteNote={this.deleteNote}/>
+                            info.pinned?
+                            <NotesContainer id={info.id} created={info.dateCreated} pinned={info.pinned} key={info.id} content={info.data.content.slice(0,200)} heading={info.data.heading.slice(0,200)} pinNote={this.pinNote} noteId={this.noteId} deleteNote={this.deleteNote}/>
+                            :''
+                        ):''}
+                    </div>
+                    <div className='notes-flex-container unpinned'>
+                        {this.state.notes.length>0 ? this.state.notes.map(info=>
+                            !info.pinned?
+                            <NotesContainer id={info.id} created={info.dateCreated} pinned={info.pinned} key={info.id} content={info.data.content.slice(0,200)} heading={info.data.heading.slice(0,200)} pinNote={this.pinNote} noteId={this.noteId} deleteNote={this.deleteNote}/>
+                            :''
                         ):''}
                     </div>
                 </div>

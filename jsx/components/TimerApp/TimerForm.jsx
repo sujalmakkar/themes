@@ -33,14 +33,14 @@ export default function TimerForm(props){
     }
 
     return(
-        <div className="timer-forms-container">
+        <div className={props.display?'timer-forms-container active':'timer-forms-container block'}>
             <form>
-                <input type="text" name="name" onInput={handleName} placeholder='Task Name'/>
+                <input type="text" maxLength={200} name="name" onInput={handleName} placeholder='Task Name'/>
             </form>
             <form>
-                <input type="number" name="hours" onInput={handleHours} placeholder='HH'/>
-                <input type="number" name="minutes" onInput={handleMinutes} placeholder='MM'/>
-                <input type="number" name="seconds" onInput={handleSeconds} placeholder='SS'/>
+                <input type="number" min={0} name="hours" onInput={handleHours} onClick={handleHours} placeholder='HH'/>
+                <input type="number" min={0} max={60} name="minutes" onInput={handleMinutes} onClick={handleMinutes} placeholder='MM'/>
+                <input type="number" min={0} max={60} name="seconds" onInput={handleSeconds} onClick={handleSeconds} placeholder='SS'/>
             </form>
         </div>
     )

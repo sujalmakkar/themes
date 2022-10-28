@@ -7,6 +7,7 @@ export default function StopWatch(props) {
     const [stopWatchInfo, setstopWatchInfo] = useState({ started: false, initiated: false });
     const [stopWatchStartTime, setstopWatchStartTime] = useState(0);
     const [stopWatchPauseTime, setstopWatchPauseTime] = useState(0);
+    const [timerInitialized, settimerInitialized] = useState('');
 
     useEffect(() => {
         if (stopWatchInfo.initiated) {
@@ -84,6 +85,16 @@ export default function StopWatch(props) {
 
     function start() {
         setstopWatchInfo({ started: true, initiated: true });
+        if (timerInitialized.length > 1) {
+            '';
+        } else {
+            const currentDate = new Date();
+
+            const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+
+            var time = currentDate.getHours() + ':' + currentDate.getMinutes() + ' ' + currentDate.toLocaleDateString('en-us', options);
+            settimerInitialized(time);
+        }
     }
 
     function pause() {
@@ -99,13 +110,17 @@ export default function StopWatch(props) {
         setstopWatchInfo({ started: false, initiated: false });
         setstopWatchStartTime(0);
         setstopWatchPauseTime(0);
-        var infoToBeSaved = stopWatchTime;
-        infoToBeSaved.name = stopWatchName;
+        settimerInitialized('');
+        var infoToBeSaved = {};
+        infoToBeSaved.time = (stopWatchTime.months ? stopWatchTime.months + 'M' : '') + (stopWatchTime.days ? stopWatchTime.days + 'D' : '') + (stopWatchTime.hours ? stopWatchTime.hours + ':' : '00:') + (stopWatchTime.minutes ? stopWatchTime.minutes : '00') + ':' + (stopWatchTime.seconds ? stopWatchTime.seconds : '00') + '.' + stopWatchTime.milliseconds;
+        infoToBeSaved.taskName = stopWatchName;
+        infoToBeSaved.initialized = timerInitialized;
         props.addLog(infoToBeSaved);
         setstopWatchTime({ timepassed: 0, milliseconds: 0, seconds: 0, minutes: 0, hours: 0, days: 0, months: 0, years: 0 });
         setstopWatchName('');
     }
     function reset() {
+        settimerInitialized('');
         setstopWatchName('');
         setstopWatchInfo({ started: false, initiated: false });
         setstopWatchStartTime(0);
@@ -116,9 +131,98 @@ export default function StopWatch(props) {
     return React.createElement(
         'div',
         { className: 'stop-watch' },
+        React.createElement(
+            'form',
+            { onSubmit: start },
+            React.createElement('input', { maxLength: 200, onChange: handletaskname, type: 'text', placeholder: 'enter task name' })
+        ),
+        React.createElement(
+            'div',
+            { className: 'stop-watch-name-display' },
+            stopWatchName.length > 0 ? stopWatchName : 'untitled'
+        ),
+        React.createElement(
+            'div',
+            { className: 'stop-watch-time-display' },
+            React.createElement(
+                'div',
+                { className: 'stop-watch-display' },
+                React.createElement(
+                    'div',
+                    { className: 'time' },
+                    React.createElement(
+                        'div',
+                        { className: 'time-number' },
+                        stopWatchTime.hours ? stopWatchTime.hours : '00'
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'time-text' },
+                        'Hours'
+                    )
+                ),
+                React.createElement(
+                    'div',
+                    { className: 'time-break' },
+                    ':'
+                ),
+                React.createElement(
+                    'div',
+                    { className: 'time' },
+                    React.createElement(
+                        'div',
+                        { className: 'time-number' },
+                        stopWatchTime.minutes ? stopWatchTime.minutes : '00'
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'time-text' },
+                        'Minutes'
+                    )
+                ),
+                React.createElement(
+                    'div',
+                    { className: 'time-break' },
+                    ':'
+                ),
+                React.createElement(
+                    'div',
+                    { className: 'time' },
+                    React.createElement(
+                        'div',
+                        { className: 'time-number' },
+                        stopWatchTime.seconds ? stopWatchTime.seconds : '00'
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'time-text' },
+                        'Seconds'
+                    )
+                ),
+                React.createElement(
+                    'div',
+                    { className: 'time-break' },
+                    '.'
+                ),
+                React.createElement(
+                    'div',
+                    { className: 'time' },
+                    React.createElement(
+                        'div',
+                        { className: 'time-number' },
+                        stopWatchTime.milliseconds ? stopWatchTime.milliseconds : 0
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'time-text' },
+                        'MilliS'
+                    )
+                )
+            )
+        ),
         stopWatchInfo.started ? React.createElement(
-            React.Fragment,
-            null,
+            'div',
+            { className: 'stop-watch-button-container' },
             React.createElement(
                 'button',
                 { onClick: pause },
@@ -135,8 +239,8 @@ export default function StopWatch(props) {
                 'save'
             )
         ) : stopWatchTime.timepassed > 1 ? React.createElement(
-            React.Fragment,
-            null,
+            'div',
+            { className: 'stop-watch-button-container' },
             React.createElement(
                 'button',
                 { onClick: start },
@@ -153,30 +257,13 @@ export default function StopWatch(props) {
                 'save'
             )
         ) : React.createElement(
-            'form',
-            { onSubmit: start },
-            React.createElement('input', { onChange: handletaskname, type: 'text', placeholder: 'enter task name' }),
+            'div',
+            { className: 'stop-watch-button-container' },
             React.createElement(
                 'button',
-                { type: 'submit' },
+                { type: 'submit', onClick: start },
                 'start'
             )
-        ),
-        React.createElement(
-            'div',
-            { className: 'stop-watch-name-display' },
-            stopWatchName.length > 0 ? stopWatchName : 'untitled'
-        ),
-        React.createElement(
-            'div',
-            { className: 'stop-watch-time-display' },
-            stopWatchTime.hours > 0 + ':' ? stopWatchTime.hours : '',
-            '  ',
-            stopWatchTime.minutes > 0 ? stopWatchTime.minutes : '00',
-            ' : ',
-            stopWatchTime.seconds > 0 ? stopWatchTime.seconds : '00',
-            ' . ',
-            stopWatchTime.milliseconds || 0
         )
     );
 }

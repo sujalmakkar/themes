@@ -11,7 +11,7 @@ class WeeksToLive extends React.Component {
     }
 
     componentDidMount() {
-        fetch('/getData/dob', {
+        fetch('./getData/dob', {
             method: 'GET',
             headers: { 'content-Type': 'application/json' }
         }).then(res => res.json()).then(result => {
@@ -23,7 +23,7 @@ class WeeksToLive extends React.Component {
     setDob(e) {
         this.setState({ dob: e });
         var data = { dob: e };
-        fetch('/postData/dob', {
+        fetch('./postData/dob', {
             method: 'POST',
             headers: { 'Content-Type': 'Application/json' },
             body: JSON.stringify(data)
@@ -32,7 +32,6 @@ class WeeksToLive extends React.Component {
     }
 
     weeksToLive(e) {
-        // setInterval(()=>{
         const currentDate = new Date();
         const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
         var todayDate = currentDate.toLocaleDateString('en-us', options);
@@ -56,8 +55,6 @@ class WeeksToLive extends React.Component {
         var weeks = numsplit[0] + '.' + decimal;
 
         this.setState({ weeksToLive: weeksToLiveRound, weeksToLiveDecimal: weeks });
-        console.log('wtf', weeksToLiveRound, weeks);
-        // },20000000)
     }
 
     render() {
@@ -67,7 +64,16 @@ class WeeksToLive extends React.Component {
             React.createElement(
                 'div',
                 { className: 'app-heading' },
-                'TimeLine'
+                React.createElement(
+                    'div',
+                    null,
+                    'Your todos'
+                ),
+                React.createElement(
+                    'span',
+                    null,
+                    'How many weeks until you Die.'
+                )
             ),
             React.createElement(
                 'div',

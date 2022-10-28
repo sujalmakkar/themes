@@ -33,9 +33,9 @@ Router.post('/',async (req,res)=>{
                 if(valid){
                     const token = jwt.sign({uid:exists.uid,username:exists.email},process.env.SECRETJWT)
                     res.cookie("auth-token",`${token}`,{sameSite:'strict',path:'/',expires:new Date(new Date().getTime()+3608980*1000),httpOnly:true})
-                    res.status(200).json({message:'USER IS VALID'})
+                    res.json({message:"User Exists",status:200})
                 }else{
-                    res.status(406).json({message:'INCORRECT PASSWORD'})
+                    res.json({message:'INCORRECT PASSWORD',status:406})
                 }
             });
         }

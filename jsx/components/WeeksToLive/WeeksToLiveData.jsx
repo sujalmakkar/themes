@@ -61,12 +61,12 @@ function TimeLineWeeksLeftInfo(props){
     return(
         <React.Fragment>
             <div className='flex'>
-                <div className="info time-line-weeks-left-info padding-20">
-                    <div className="weeks-passed padding-10">
-                    Weeks Lived : <span className='weeks-lived'>{props.weeksToLive}</span><span>/{props.totalweeks}</span>
+                <div className="info time-line-weeks-left-info padding-20 color-heading">
+                    <div className="weeks-passed padding-10 color-heading">
+                    Weeks Lived : <span className='weeks-lived color-heading'>{props.weeksToLive}</span><span>/{props.totalweeks}</span>
                     </div>
-                    <div className="weeks-death  padding-10">
-                    Death in : <span>{((props.totalweeks - props.weeksToLive).toString()).slice(0,(((props.weeksToLiveWhole).toString()).length)+5)}</span> weeks
+                    <div className="weeks-death  padding-10 color-heading">
+                    Death in : <span className='color-heading'>{((props.totalweeks - props.weeksToLive).toString()).slice(0,(((props.weeksToLiveWhole).toString()).length)+5)}</span> weeks
                     </div>
                 </div>
             </div>

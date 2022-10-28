@@ -28,7 +28,11 @@ var DataSchema = new mongoose.Schema({
 
         allletters:[],
 
-        allnotes:[]
+        allnotes:[],
+
+        daysreport:[],
+
+        weeksreport:[]
 
 })
 
@@ -36,3 +40,5 @@ var DataSchema = new mongoose.Schema({
 const USER = mongoose.model('USER',DataSchema)
 
 module.exports = USER
+
+//  date:'',todos:[]

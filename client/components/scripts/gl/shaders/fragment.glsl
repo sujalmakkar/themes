@@ -17,7 +17,7 @@ void main() {
   vec3 oscilation = vec3(1.0, 1.0, 1.0);
   vec3 phase = vec3(0.0, 0.1, 0.2);
 
-  vec3 color = cosPalette(uHue + distort, brightness, contrast, oscilation, phase);
+  vec3 color = cosPalette(uHue + distort, vec3(0.082,0.494,0.494),vec3(0.082,0.494,0.494),vec3(0.082,0.494,0.494),vec3(0.082,0.494,0.494));
 
   gl_FragColor = vec4(color, uAlpha);
 }

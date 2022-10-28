@@ -14,7 +14,7 @@ class GoalsApp extends React.Component {
     }
 
     componentDidMount() {
-        fetch('/getData/goals', {
+        fetch('./getData/goals', {
             method: 'GET',
             headers: { 'content-Type': 'application/json' }
         }).then(e => e.json()).then(result => {
@@ -24,7 +24,6 @@ class GoalsApp extends React.Component {
             years.reverse();
             months.reverse();
             weeks.reverse();
-            console.log(years, 'aftetr');
             this.setState({ years: years });
             this.setState({ months: months });
             this.setState({ weeks: weeks });
@@ -93,8 +92,8 @@ class GoalsApp extends React.Component {
         statecopy[index].goals[indexgoal].done = current;
         this.setState({ [type]: statecopy });
         e.target.dataset.done = current;
-        console.log(e.target.dataset);
-        fetch('/postData/goal', {
+
+        fetch('./postData/goal', {
             method: 'POST',
             headers: { 'Content-Type': 'Application/json' },
             body: JSON.stringify(e.target.dataset)
@@ -108,13 +107,18 @@ class GoalsApp extends React.Component {
         var statecopy = this.state[type];
         var index = statecopy.findIndex(e => e.year || e.month || e.week == number);
         var indexgoal = statecopy[index].goals.findIndex(e => e.id == id);
+
+        var current = statecopy[index].goals[indexgoal].done;
+
+        e.target.dataset.done = current;
+
         statecopy[index].goals.splice(indexgoal, 1);
         if (statecopy[index].goals.length == 0) {
             statecopy.splice(index, 1);
         }
         this.setState({ [type]: statecopy });
 
-        fetch('/postData/delgoal', {
+        fetch('./postData/delgoal', {
             method: 'POST',
             headers: { 'Content-Type': 'Application/json' },
             body: JSON.stringify(e.target.dataset)
@@ -162,7 +166,7 @@ class GoalsApp extends React.Component {
             // SENDING THE DATA TO SERVER
             e.number = currentYear;
             e.type = selectedTime;
-            fetch('/postData/newgoal', {
+            fetch('./postData/newgoal', {
                 method: 'POST',
                 headers: { 'content-Type': 'application/json' },
                 body: JSON.stringify(e)
@@ -190,7 +194,7 @@ class GoalsApp extends React.Component {
 
             e.number = month;
             e.type = selectedTime;
-            fetch('/postData/newgoal', {
+            fetch('./postData/newgoal', {
                 method: 'POST',
                 headers: { 'content-Type': 'application/json' },
                 body: JSON.stringify(e)
@@ -217,7 +221,7 @@ class GoalsApp extends React.Component {
 
             e.number = week;
             e.type = selectedTime;
-            fetch('/postData/newgoal', {
+            fetch('./postData/newgoal', {
                 method: 'POST',
                 headers: { 'content-Type': 'application/json' },
                 body: JSON.stringify(e)
@@ -242,15 +246,20 @@ function GoalsHeading(props) {
     return React.createElement(
         'div',
         { className: 'app-heading' },
-        type == 'year' ? React.createElement(
+        React.createElement(
             'div',
+            null,
+            'Goals'
+        ),
+        type == 'year' ? React.createElement(
+            'span',
             null,
             'Set Goals for ',
             type,
             ' ',
             props.currentYear
         ) : type == 'month' ? React.createElement(
-            'div',
+            'span',
             null,
             'Set Goals for ',
             type,
@@ -259,7 +268,7 @@ function GoalsHeading(props) {
             ' of year ',
             props.currentYear
         ) : React.createElement(
-            'div',
+            'span',
             null,
             'Set Goals for ',
             type,

@@ -1,6 +1,5 @@
 export default function ripple() {
         var ripple_elements = [...document.getElementsByClassName('ripple-effect')];
-        console.log(ripple_elements);
         ripple_elements.forEach(a => a.addEventListener('click', function (e) {
                 const ripple = document.createElement("span");
 

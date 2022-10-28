@@ -20,6 +20,10 @@ export default function NoteContainer(props) {
         props.deleteNote(props.id);
     }
 
+    function pinNote(e) {
+        props.pinNote(props.id);
+    }
+
     useEffect(() => {
         Heading.innerHTML = props.heading;
         Content.innerHTML = props.content;
@@ -46,9 +50,22 @@ export default function NoteContainer(props) {
                     props.created
                 ),
                 React.createElement(
-                    'span',
-                    { className: 'delete-note', onClick: deleteNote },
-                    'Delete Note'
+                    'div',
+                    { className: 'note-row' },
+                    props.pinned ? React.createElement(
+                        'div',
+                        { className: 'pin-note', title: 'unpin', onClick: pinNote },
+                        React.createElement('img', { src: 'https://img.icons8.com/fluency-systems-filled/48/000000/pin.png' })
+                    ) : React.createElement(
+                        'div',
+                        { className: 'pin-note', title: 'pin to top', onClick: pinNote },
+                        React.createElement('img', { src: 'https://img.icons8.com/fluency-systems-regular/48/000000/pin.png' })
+                    ),
+                    React.createElement(
+                        'span',
+                        { className: 'delete-note', onClick: deleteNote },
+                        React.createElement('img', { src: 'https://img.icons8.com/fluency-systems-regular/48/000000/filled-trash.png' })
+                    )
                 )
             )
         )

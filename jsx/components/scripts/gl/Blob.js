@@ -28,8 +28,6 @@ export default class Blob extends THREE.Object3D {
       defines: {
         PI: Math.PI
       },
-      // wireframe: true,
-      // side: THREE.DoubleSide
       transparent: true,
     });
 

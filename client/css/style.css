@@ -30,7 +30,7 @@ body{
     height:100vh;
     font-family:poppins;
     background:#e9f0f5;
-    color:#157e7e;
+    color:#000;
 }
 
 /* DEFAULT STYLES  APPLIED ON EVERY PARTICULAR TYPE  OF ELEMENT*/
@@ -48,6 +48,7 @@ input{
 button{
     color:#f0f0f0;
     cursor:pointer;
+    margin:5px;
     background: #157e7e;
 }
 
@@ -61,10 +62,61 @@ button{
 .app{
     width:100%;
 }
+
+#webgl-blob{
+    cursor: grab;
+}
+
+.tool-tip{
+ position:relative;   
+ margin:2px;
+}
+.tool-tip img{
+    width:18px;
+}
+.tool-tip .tool-tip-text{
+    opacity: 0;
+    position: absolute;
+    left:0px;
+    width:200px;
+    transform: translate(10%,-50%);
+    background:#157e7eb6;
+    z-index: 20;
+    color:black;
+    border-radius:6px;
+    border:1px solid #157e7e;
+    pointer-events: none;
+    padding:10px;
+}
+.tool-tip:hover .tool-tip-text{
+    opacity: 1; 
+
+    transition: all .3s ease;
+}
+.hint{
+    background:#157e7e15;
+    font-size: 16px;
+    font-weight:700;
+    color:#157e7e;
+    border:1px solid #157e7e;
+    border-radius:4px;
+    padding:20px;
+    margin:10px;
+}
+.hint img{
+    width:18px;
+    display: inline;
+    transform: translateY(3px);
+}
+.hint span{
+    margin:5px;
+}
+
 .ripple-effect{
     position: relative;
     overflow: hidden;
 }
+
 .box-shadow{
     box-shadow: rgba(99, 99, 99, 0.2) 0px 3px 10px 0px;
 }
@@ -161,11 +213,19 @@ button{
     width:100%;
     display: flex;
     align-items: center;
+    flex-direction:column;
     font-size: 40px;
     font-weight: 700;
     justify-content:center;
     font-family: montserrat;
     padding-bottom:20px;
+    color:#157e7e;
+}
+.app-heading span{
+    font-size:50%;
+    padding:10px;
+    margin:10px;
+    opacity: .85;
 }
 /* DEFAULT STYLES FOR CERTAIN CLASS NAMES */
 
@@ -188,25 +248,6 @@ button{
 #contents{
     z-index: 5;
 }
-.noise{
-    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-    visibility: inherit;
-    color: #000;
-    cursor: pointer;
-    /* -webkit-user-select: none; */
-    -webkit-font-smoothing: antialiased;
-    text-rendering: geometricPrecision;
-    box-sizing: border-box;
-    position: absolute;
-    width: 100%;
-    height: 100vh;
-    /* background-image: url('https://www.richardsancho.com/img/noise.png'); */
-    background-size: auto;
-    background-repeat: repeat;
-    mix-blend-mode: overlay;
-    opacity: .2;
-    z-index:-136;
-}
 #webgl_wrapper{
     width: 100%;
     height: 100%;
@@ -215,24 +256,20 @@ button{
     top:0;
     z-index: -1;
     opacity:.4;
-    /* background:url(../images/bg_1.jpg);
-    background-size:400% 400%;
-    opacity: .7;
-    background-position: 0% 0%;
-    animation :bg 5s linear infinite; */
+}
+#webgl_wrapper_cover{
+    content: '';
+    width:100vw;
+    height:100vh;
+    left:0;
+    top:0;
+    position:fixed;
+    overflow: hidden;
+    z-index:-1;
+    -webkit-backdrop-filter: blur(80px);
+    backdrop-filter: blur(80px)
 }
 
-@keyframes bg{
-    0%{
-        background-position: 0% 0%;
-    }
-    50%{
-        background-position: 75% 75%;
-    }
-    100%{
-        background-position:0% 0%;
-    }
-}
 
 #page{
     display: flex;
@@ -244,34 +281,61 @@ button{
     flex-direction: column;
     background-size:cover;
     z-index: 5;
-    -webkit-backdrop-filter: blur(80px);
-    backdrop-filter: blur(80px)
     
 }
 
 #fixed-navbar{
     width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     height:auto;
     padding:20px;
     border-bottom: 1px solid #157e7e;
 }
+
 #fixed-navbar .logo-container .logo{
     font-weight: 800;
     font-size:28px;
     font-family:montserrat;
     color:#157e7e;
 }
+
 #fixed-navbar .logo-container .logo span{
     -webkit-text-stroke: 1px #032727;
     color:transparent;
 }
 
+#fixed-navbar .profile{
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    font-size: 16px;
+    color:#157e7e;
+    font-weight: 700;
+    position: relative;
+}
+#fixed-navbar .profile img{
+    width:18px;
+}
+#fixed-navbar .profile button{
+    border-radius: 6px;
+    margin:10px;
+    font-size: 16px;
+    padding: 8px 15px;
+    background: #157e7ecb;
+    transition: all .2s ease;
+}
+#fixed-navbar .profile button:hover{
+    background: #157e7e;
+}
 #App-container{
     width:100vw;
     height:90%;
     display:flex;
     flex-direction: row;
 }
+
 #App{
     width:95%;
     height:100%;
@@ -280,6 +344,7 @@ button{
     overflow-y: scroll;
     overflow-x: hidden;
 }
+
 .apps-display{
     display:none;
     animation:hide .4s ease;
@@ -289,6 +354,7 @@ button{
     display:block;
     animation:show .4s ease;
 }
+
 @keyframes show{
     0%{
         opacity:0
@@ -297,6 +363,7 @@ button{
         opacity:1;
     }
 }
+
 #App-container .App-selector{
     width:auto;
     min-width: 100px;
@@ -327,12 +394,15 @@ button{
 #App-container .App-selector .app-list.active{
     background:#157e7ebb;
 }
+
 #App-container .App-selector .app-list:hover{
     background:#157e7e6c;
 }
+
 #App-container .App-selector .app-list.active:hover{
     background:#157e7ebb;
 }
+
 #current-app-display{
     /* max-width:100%; */
     width:95%;
@@ -346,18 +416,32 @@ button{
     pointer-events: none;
     border-radius:50%;
     background:#fff;
-    animation: ripple .8s ease;
+    animation: ripple .6s ease;
 }
+
+.add-score{
+    position:absolute;
+    right:10%;
+    bottom:10%;
+    transform: translate(-50%,-50%);
+    pointer-events: none;
+    border-radius:50%;
+    color:#157e7e;
+    font-size:22px;
+    font-family: poppins;
+    font-weight: 500;
+    animation: addscore 1.5s ease;
+}
+
 @keyframes ripple{
     0%{
         display: block;
         border-radius: 100%;
         width:0px;
         height:0px;
-        opacity: .5;
+        opacity: .3;
     }
     100%{
-        background:rgba(255, 255, 255, 0.356);
         width:200px;
         height:200px;
         opacity: 0;
@@ -365,9 +449,109 @@ button{
     }
 }
 
+@keyframes addscore{
+    0%{
+        display: block;
+        bottom:10%;
+    }
+    100%{
+        bottom:25%;
+        opacity: 0;
+        display:none;
+    }
+}
+
+
 
 /* CONST STYLES */
 
+/* DASHBOARD APP STYLES */
+#DashBoardApp {
+    display: flex;
+    flex-direction: column;
+    width:100%;
+    align-items:center;
+    justify-content:center;
+    overflow-x: hidden;
+}
+#DashBoardApp .stats-container{
+    width:100%;
+}
+#DashBoardApp .score-display {
+    display: flex;
+    width:95%;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    color:#157e7e;
+    font-size:24px;
+    padding:10px 20px;
+    font-weight: 700;
+}
+
+#DashBoardApp .score-display .stat{
+    width:22.5%;
+    padding:20px;
+    border-radius: 6px;
+    background:#157e7e15;
+    border:1px solid #157e7e;
+    margin:1.25%;
+}
+#DashBoardApp .score-display .stat span{
+    font-size: 14px;
+    font-weight: 900;
+}
+#DashBoardApp .score-display .stat div{
+    font-size:32px;
+    font-weight: 900;
+}
+
+#DashBoardApp .score-display .week-heading{
+    opacity: .8;
+}
+
+#DashBoardApp #StopWatchDashboard{
+    width:100%;
+    display:flex;
+    padding:20px;
+    align-items: center;
+    justify-content:center;
+}
+#DashBoardApp #StopWatchDashboard .stop-watch{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:100%;
+    flex-direction: column  ;
+}
+
+#DashBoardApp #StopWatchDashboard .stop-watch .stop-watch-display{
+    display:flex;
+    align-items:center;
+    flex-direction: row;
+    justify-content:center;
+    color:#157e7e;
+    font-size:32px;         
+    font-weight: 700;
+}
+
+#DashBoardApp #StopWatchDashboard .stop-watch .stop-watch-button-container{
+    margin:10px;
+}
+#DashBoardApp #StopWatchDashboard .stop-watch .stop-watch-button-container button{
+    background:#157e7ecc;
+    border-radius: 4px;
+    margin:10px;
+    padding:10px 30px;
+    border: none;
+}
+#DashBoardApp #StopWatchDashboard .stop-watch .stop-watch-button-container button:hover{
+    background:#157e7e  ;
+}
+
+
+
+/* DASHBOARD APP STYLES */
 
 
 /* TODO APP STYLES */
@@ -426,6 +610,7 @@ button{
     position:relative;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 3px 10px 0px;
     animation:addlist .4s ease;
+    transition:all .2s ease;
 }
 
 #TodoApp .todos-container-date .date{
@@ -443,7 +628,9 @@ button{
     flex-direction:column;
     font-size: 18px;
     align-items: center;
+    transition:all .2s ease;
 }
+
 #TodoApp .todos-container-date .todo-container-type{
     font-size:18px;
     font-weight: 700;
@@ -464,6 +651,7 @@ button{
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    background: #b1d3ec4f;
     animation:addlist .4s ease;
 }
 
@@ -485,9 +673,11 @@ button{
     margin:4px;
     cursor: pointer;
 }
+
 #TodoApp .todos-container-date .todo .doneIndicator.undone:hover{
     background: #157e7e6b;
 }
+
 #TodoApp .todos-container-date .todo .doneIndicator.done:hover{
     background: #8d919271;
 }
@@ -499,6 +689,7 @@ button{
     margin:4px;
     cursor: pointer;
 }
+
 #TodoApp .todos-container-date .todo .deleteTodo:hover{
     background: #92163b71;
 }
@@ -507,6 +698,7 @@ button{
     height:16px;
     pointer-events: none;
 }
+
 #TodoApp .todos-container-date .todo .todo-text{
     inline-size: 80%;
     text-align: center;
@@ -518,12 +710,12 @@ button{
     outline:none;
     border-radius: 4px;
 }
+
 #TodoApp .todo-text.done{
     text-decoration:line-through;
 }
 
 /* TODO APP STYLES */
-
 
 
 
@@ -535,6 +727,7 @@ button{
     display: inline-flex;
     margin: auto;
 }
+
 #WeeksToLive .year{
     width: 100%;
     overflow: hidden;
@@ -552,6 +745,7 @@ button{
 #WeeksToLive .week.living{
     animation: living 2s linear infinite;
 }
+
 @keyframes living{
     0%{
         background: #157e7e75;
@@ -568,7 +762,6 @@ button{
 
 #WeeksToLive input,button{
     font-family: poppins;
-    margin:5px;
 }
 
 #WeeksToLive .info{
@@ -591,6 +784,7 @@ button{
     justify-content: space-between;
     flex-direction: row;
 }
+
 #WeeksToLive .flex{
     width:100%;
     display: flex;
@@ -598,14 +792,17 @@ button{
     justify-content: center;
     flex-direction: column;
 }
+
 #WeeksToLive .weeks-passed,#WeeksToLive .weeks-death{
     background: #b1d3ec4f;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 3px 10px 0px;
     border-radius:10px;
     padding:10px;
 }
+
 #WeeksToLive .time-line-weeks-left-info .weeks-lived{
     font-size:130%;
+    font-weight:600;
 }
 
 #WeeksToLive .hovered-week-info.hidden{
@@ -636,6 +833,7 @@ button{
     box-shadow: rgba(99, 99, 99, 0.2) 0px 3px 10px 0px;
     padding:30px;
     border-radius: 10px;
+
 }
 
 /* TIMELINE APP STYLES */
@@ -682,8 +880,8 @@ button{
     overflow-wrap: break-word;
     font-size: 18px;
 }
-/* #GoalsApp  */
 
+/* #GoalsApp  */
 
 #GoalsApp .goal .doneIndicator{
     border-radius: 4px;
@@ -701,6 +899,7 @@ button{
 #GoalsApp .goals-display{
     position: relative;
     overflow: hidden;
+    transition:all .2s ease;
     animation:addlist .4s ease;
 }
 #GoalsApp .goals-display .date{
@@ -734,14 +933,12 @@ button{
     margin: 10px 10px;
 }
 
-
 #GoalsApp .goals-type select{
     font-family: poppins;
     padding:20px;
     font-size:20px;
     background: #157e7e23;
 }
-
 
 #GoalsApp #type option{
     background: #157e7e23;
@@ -756,13 +953,6 @@ button{
 
 /* NOTES APP */
 
-
-/* #NotesApp .notes-flex-container{
-    width:100%;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-} */
 #NotesApp  .note{
     display: none;
     opacity: 0;
@@ -782,6 +972,16 @@ button{
     color:#000;
     animation: popout .2s ease;
 }
+#NotesApp  .flex{
+    display: flex;
+    align-items: center;
+    width:100%;
+    justify-content: center;
+}
+#NotesApp  .flex button{
+    border-radius: 8px;
+    padding:10px 20px;
+}
 #NotesApp  .note .note-text-container{
     padding:10px;
 }
@@ -796,7 +996,9 @@ button{
     opacity: .9;
 }
 #NotesApp  .note .note-text-container .text-container{
-    margin:5px 0px;
+    margin:10px 0px;
+    background:#157e7e25;
+    border-radius: 6px;
     padding:10px;
 }
 
@@ -809,7 +1011,6 @@ button{
 }
 
 .note .note-contents-container{
-    position: relative;
     padding:10px;
     max-height: 65vh;
     overflow: scroll;
@@ -890,6 +1091,7 @@ button{
 #NotesApp .notes-flex-container{
     width: 100%;
     margin: 0 auto;
+    transition:all .2s ease;
 }
 #NotesApp .notes-flex-container .note-container{
     width: 30%;
@@ -901,6 +1103,17 @@ button{
     color:#000;
     border: .4px solid #157e7e50;
     transition:all .2s ease;
+    animation: new .2s ease;
+}
+@keyframes new{
+    0%{
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    100%{
+        opacity:1;
+        transform: translateY(0px);
+    }
 }
 #NotesApp .note-preview{
     display: flex;
@@ -943,17 +1156,25 @@ button{
     justify-content: space-between;
     align-items: center;
 }
+#NotesApp .note-container .note-info .note-row{
+    display: flex;
+}
 
 #NotesApp .note-container .note-info span{
     opacity:.92;
 }
-#NotesApp .note-container .delete-note{
+#NotesApp .note-container .delete-note , #NotesApp .note-container .pin-note{
     padding:6px;
     cursor:pointer;
     border-radius: 4px;
 }
 
-#NotesApp .note-container:hover .delete-note:hover{
+#NotesApp .note-container .delete-note img , #NotesApp .note-container .pin-note img{
+    height:18px;
+}
+
+
+#NotesApp .note-container:hover .delete-note:hover,#NotesApp .note-container:hover .pin-note:hover{
     background:#157e7e28;
     opacity: 1
 }
@@ -964,3 +1185,689 @@ button{
 }
 
 /* NOTES APP */
+
+
+
+
+
+/* DEADLINE APP */
+
+#DeadLineApp .deadline-form{
+    width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#DeadLineApp .deadline-form form {
+    width:90%;
+    display: flex;
+    flex-direction: row;
+}
+#DeadLineApp .deadline-form form input:nth-child(1){
+    width:60%;
+}
+#DeadLineApp .deadline-form form input{
+    margin:5px;
+}
+
+#DeadLineApp .dead-line-container{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items:center;
+    justify-content:center;
+    transition:all .2s ease;
+
+}
+
+#DeadLineApp .dead-line-container .dead-line{
+    width:45%;
+    font-size: 18px;
+    font-family: poppins;
+    background: #b1d3ec4f;
+    padding:20px;
+    border:.5px solid #157e7e;
+    margin:2%;
+    border-radius:6px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 3px 10px 0px;
+    color:#000;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content: center;
+    transition:all .2s ease;
+    animation: new .2s ease;
+}
+
+#DeadLineApp .dead-line-container .dead-line .dead-line-row{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius:6px;
+    margin:10px;
+}
+#DeadLineApp .dead-line-container .dead-line .dead-line-name-container{
+    width:100%;
+    overflow: hidden;
+}
+#DeadLineApp .dead-line-container .dead-line .dead-line-name{
+    max-inline-size: 100%;
+    width:auto;
+    display: inline-block;
+    padding:10px;
+    margin:10px 0px;
+    border-radius: 6px;
+    background:#157e7e5e;
+    overflow-wrap: break-word;
+    font-weight: 500;
+}
+
+#DeadLineApp .dead-line-container .dead-line .dead-line-due{
+    background:#157e7e5e;
+    padding:10px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+#DeadLineApp .dead-line-container .dead-line .dead-line-time-left-display{
+    display: flex;
+    background:#157e7e1c;
+    width:100%;
+    border-radius:6px;
+    justify-content: center;
+    margin:5px;
+    padding:5px 10px;
+}
+#DeadLineApp .dead-line-container .dead-line .dead-line-time-left-display .time-break{
+    margin:15px 0px;
+}
+#DeadLineApp .dead-line-container .dead-line .dead-line-time-left-display .time{
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    flex-direction: column;
+    padding:5px;
+    margin:5px;
+}
+#DeadLineApp .dead-line-container .dead-line .dead-line-time-left-display .time .time-text{
+    font-size: 14px;
+    opacity: .8;
+}
+
+#DeadLineApp .dead-line-container .dead-line .dead-line-time-left-display .time .time-number{
+    font-size: 32px;
+    font-weight: 700;
+}
+
+#DeadLineApp .dead-line-container .dead-line .dead-line-delete,#DeadLineApp .dead-line-container .dead-line .dead-line-pin{
+    padding:6px;
+    margin:6px;
+    cursor:pointer;
+    border-radius: 4px;
+    font-size: 18px;
+    display: inline-block;
+    cursor:pointer;
+    color:#000;
+    border: none;
+    background:#157e7e25;
+}
+
+#DeadLineApp .dead-line-container .dead-line .dead-line-delete img,#DeadLineApp .dead-line-container .dead-line .dead-line-pin img{
+    height:18px;
+}
+
+#DeadLineApp .dead-line-container .dead-line .dead-line-delete:hover,#DeadLineApp .dead-line-container .dead-line .dead-line-pin:hover{
+    background:#157e7e5e;
+}
+
+#DeadLineApp .dead-line-container .dead-line:hover .dead-line-row-two{
+    opacity:1;
+}
+
+#DeadLineApp .dead-line-container .dead-line .dead-line-row-two{
+    display: flex;
+    opacity:0;
+    justify-content: center;
+}
+
+/* DEAD LINE APP */
+
+
+
+/* FUTURE LETTER APP */
+#FutureLetterApp{
+    width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#FutureLetterApp .future-letter-app-form{
+    display:flex;
+    flex-direction:column;
+    color:#000;
+    background: #b1d3ec4f;
+    border: .5px solid #157e7e;
+    border-radius: 8px;
+    width:80%;
+    height: auto;
+    margin:20px;
+    padding:20px;
+}
+#FutureLetterApp .future-letter-app-display{
+    color:#157e7e;
+}
+
+#FutureLetterApp .future-letter-app-form form{
+    width:100%;
+}
+
+#FutureLetterApp .future-letter-app-form form input:nth-child(1){
+    padding:10px;
+    margin:15px 0px;
+    width:100%;
+}
+
+#FutureLetterApp .future-letter-app-form form .text-container{
+    max-inline-size: 100%;
+    width:100%;
+    overflow-wrap: break-word;
+    background:#157e7e2a;
+    margin:15px 0px;
+    padding:10px;
+    font-size: 18px;
+    border-radius: 6px;
+    border: none;
+    transition: all .2 ease;
+}
+
+#FutureLetterApp .future-letter-app-form form .future-letter-heading{
+    font-size:30px;
+    padding:10px;
+    font-family: poppins;
+    font-weight: 700;
+}
+
+#FutureLetterApp .future-letter-app-form form .future-letter-content-div{
+    min-height:150px;
+}
+
+.future-letter-app-opened{
+    width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.opened-letter-container{
+    width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.opened-letter-heading{
+    display: inline-block;
+    color:#157e7e;
+    position: relative;
+    padding: 0px 10px;
+}
+
+.opened-letter-heading:after ,.opened-letter-heading:before {
+    content: '';
+    display: block;
+    width: 1000px;
+    position: absolute;
+    top: 0.73em;
+    border-top: 1px dotted #157e7e;
+}
+
+.opened-letter-heading:after {
+    left: 100%;
+}
+.opened-letter-heading:before{
+    right:100%;
+}
+
+.opened-letter{
+    width:80%;
+    background: #b1d3ec4f;
+    padding:20px;
+    margin:20px;
+    border-radius: 8px;
+    border: 1px solid #157e7e;
+}
+
+.opened-letter .opened-letter-date-created, .opened-letter .opened-letter-date-received{
+    padding:10px;
+    margin:10px;
+    font-size:16px;
+    border-radius: 6px;
+    font-weight:500;
+}
+.opened-letter .opened-letter-subject,.opened-letter .opened-letter-body{
+    padding:10px;
+    background:#157e7e2a;
+    margin:10px;
+    font-size:16px;
+    border-radius: 6px;
+    max-inline-size: 100%;
+    width: 100%;
+    overflow-wrap: break-word;
+}
+.opened-letter-row{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.opened-letter-date-created , .opened-letter-date-received{
+    background:#157e7e5e;
+    padding:10px;
+    border-radius: 6px;
+    font-size:14px;
+}
+/* FUTURE LETTER APP */
+
+
+
+/* TIMER APP */
+
+#TimerApp .timer-forms-container{
+    padding:20px;
+    border-radius: 4px;
+    border:.5px solid #157e7e;
+    width:70%;
+    background: #b1d3ec4f;
+    transition: all .2s ease;
+}
+
+#TimerApp .timer-forms-container.block{
+    opacity:.4;
+    pointer-events: none;
+    cursor:not-allowed;
+}
+
+#TimerApp .timer-forms-container form{
+    display:flex;
+    align-items: center;
+    padding:10px;
+    justify-content: center;
+    flex-direction:row;
+}
+
+#TimerApp .timer-forms-container form:nth-child(2) input{
+    padding:4px;
+    width:80px;
+    margin:2px;
+    background:#157e7e1c;
+    border-radius: 4px;
+    border: none;
+}
+#TimerApp .timer-forms-container input::placeholder{
+    color:rgba(0, 0, 0, 0.836);
+    font-weight: 500;
+}
+
+#TimerApp .timer-forms-container form:nth-child(1) input{
+    padding:10px;
+    width:100%;
+    border: none;
+    margin:2px;
+    background:#157e7e1c;
+    border-radius: 4px;
+}
+
+#TimerApp .timer{
+    width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 8px;
+    padding:20px 20px;
+    margin: 20px;
+    background: #b1d3ec4f;
+    padding:20px;
+    transition: all .4s ease;
+    border:.5px solid #157e7e;
+}
+#TimerApp .timers-container{
+    display:flex;
+    align-items: center;
+    width:100%;
+    flex-direction: column;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#TimerApp .start-button{
+    border: none;
+    transition: all .2s ease;
+    background:#157e7e77;
+}
+
+#TimerApp .timer-name{
+    font-size:18px;
+    font-weight:700;
+    inline-size: 100%;
+    padding:10px;
+    margin:10px;
+    text-align: center;
+    background:#157e7e5e;
+    border-radius: 8px;
+    overflow-wrap: break-word;
+}
+
+#TimerApp .timer .timer-display{
+display: flex;
+background:#157e7e1c;
+width:100%;
+border-radius:6px;
+align-items: center;
+justify-content: center;
+position: relative;
+margin:5px;
+padding:5px 10px;
+overflow: hidden;
+}
+
+#TimerApp .timer .timer-display .time-break{
+    margin:15px 0px;
+}
+#TimerApp .timer .timer-display .time{
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    flex-direction: column;
+    padding:5px;
+    margin:5px;
+}
+#TimerApp .timer .timer-display .time .time-text{
+    font-size: 14px;
+    opacity: .8;
+}
+
+#TimerApp .timer .timer-display .time .time-number{
+    font-size: 32px;
+    font-weight: 700;
+}
+#TimerApp .timer .timer-display .timer-display-background-width{
+    position: absolute;
+    left:0;
+    top:0;
+    height: 100%;
+    transition: all .4s linear;
+    width:0%;
+    z-index:-1;
+    background:#157e7e44;
+}
+
+#TimerApp .timer .timer-controls{
+    width:100%;
+    margin:5px;
+    display: flex
+}
+#TimerApp .timer .timer-controls button{
+    width:100%;
+    border-radius: 6px;
+    background:#157e7e85;
+    font-family: poppins;
+    color:#000;
+    font-weight: 700;
+    border: none;
+}
+#TimerApp .timer .timer-controls button:hover{
+    background:#157e7ea8;
+}
+
+
+#TimerApp .timer-logs{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    animation:addlist .4s ease;
+}
+#TimerApp .timer-logs.block{
+    opacity: 0;
+    display:none;
+    pointer-events: none;
+}
+#TimerApp .timer-logs .timer-logs-heading{
+    color:#157e7e;
+    font-size: 30px;
+    font-weight: 700;
+    padding:10px;
+    margin:20px;
+}
+#TimerApp .timer-logs ul{
+    padding:20px;
+    min-width:70%;
+    max-width:90%;
+    border-radius: 6px;
+    border: .5px solid #157e7e;
+    animation:addlist .4s ease;
+}
+#TimerApp .timer-logs ul li{
+    background: #b1d3ec4f;
+    margin:5px;
+    width:100%;
+    border-radius: 6px;
+    border: .5px solid #157e7e;
+    animation:addlist .4s ease;
+}
+#TimerApp .timer-logs ul li .timer-log-name{
+    max-inline-size: 70%;
+    overflow-wrap: break-word;
+    border: .5px solid #157e7e;
+    margin:5px;
+    border-radius: 4px;
+    padding:5px;
+}
+#TimerApp .timer-logs ul li span{
+    padding:5px;
+    max-inline-size: 100%;
+    overflow-wrap: break-word;
+    border: .5px solid #157e7e;
+    margin:5px;
+    border-radius: 4px;
+}
+#TimerApp .timer-logs .timer-log{
+    background:#157e7e1c;
+    padding:5px;
+    width:100%;
+    border-radius: 6px;
+    list-style: none;
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+/* TIMER APP */
+
+#StopWatchApp .stop-watch-flex{
+    width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+#StopWatchApp .stop-watch{
+    width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 8px;
+    padding:20px 20px;
+    margin: 20px;
+    background: #b1d3ec4f;
+    padding:20px;
+    transition: all .4s ease;
+    border:.5px solid #157e7e;
+}
+
+#StopWatchApp .stop-watch form{
+    display:flex;
+    align-items: center;
+    width:100%;
+    flex-direction: column
+}
+#StopWatchApp .stop-watch-button-container{
+    display:flex;
+    align-items: center;
+    justify-content:center;
+    width:100%;
+    align-items: center;
+}
+#StopWatchApp .stop-watch form button,#StopWatchApp .stop-watch form input{
+    padding:10px;
+    width:100%;
+    border: none;
+    margin:10px;
+    background:#157e7e1c;
+    border-radius: 4px;
+}
+#StopWatchApp .stop-watch input::placeholder{
+    color:rgba(0, 0, 0, 0.836);
+    font-weight: 500;
+}
+
+#StopWatchApp .stop-watch button{
+    width:100%;
+    border-radius: 6px;
+    background:#157e7e85;
+    font-family: poppins;
+    color:#000;
+    font-weight: 700;
+    margin:10px 5px;
+    border: none;
+}
+#StopWatchApp .stop-watch button:hover{
+    background:#157e7ea8;
+}
+
+#StopWatchApp .stop-watch .stop-watch-time-display{
+    width:100%;
+}
+#StopWatchApp .stop-watch .stop-watch-name-display{
+    font-size:18px;
+    font-weight:700;
+    inline-size: 100%;
+    padding:10px;
+    margin:10px;
+    text-align: center;
+    background:#157e7e5e;
+    border-radius: 8px;
+    overflow-wrap: break-word;
+}
+#StopWatchApp .stop-watch .stop-watch-display{
+    display: flex;
+    background:#157e7e1c;
+    width:100%;
+    border-radius:6px;
+    justify-content: center;
+    position: relative;
+    margin:5px;
+    padding:5px 10px;
+    overflow: hidden;
+}
+    
+#StopWatchApp .stop-watch .stop-watch-display .time-break{
+    margin:15px 0px;
+}
+#StopWatchApp .stop-watch .stop-watch-display .time{
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    flex-direction: column;
+    padding:5px;
+    margin:5px;
+}
+#StopWatchApp .stop-watch .stop-watch-display .time .time-text{
+    font-size: 14px;
+    opacity: .8;
+}
+
+#StopWatchApp .stop-watch .stop-watch-display .time .time-number{
+    font-size: 32px;
+    font-weight: 700;
+}
+
+
+
+
+
+
+#StopWatchApp .stop-watch-logs{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width:100%;
+    animation:addlist .4s ease;
+}
+#StopWatchApp .stop-watch-logs.block{
+    opacity: 0;
+    display:none;
+    pointer-events: none;
+}
+#StopWatchApp .stop-watch-logs .stop-watch-logs-heading{
+    color:#157e7e;
+    font-size: 30px;
+    font-weight: 700;
+    padding:10px;
+    margin:20px;
+}
+#StopWatchApp .stop-watch-logs ul{
+    padding:20px;
+    min-width:70%;
+    max-width:90%;
+    border-radius: 6px;
+    border: .5px solid #157e7e;
+    animation:addlist .4s ease;
+}
+#StopWatchApp .stop-watch-logs ul li{
+    background: #b1d3ec4f;
+    margin:5px;
+    width:100%;
+    border-radius: 6px;
+    border: .5px solid #157e7e;
+    animation:addlist .4s ease;
+}
+#StopWatchApp .stop-watch-logs ul li .stop-watch-log-name{
+    max-inline-size: 70%;
+    overflow-wrap: break-word;
+    border: .5px solid #157e7e;
+    margin:5px;
+    border-radius: 4px;
+    padding:5px;
+}
+#StopWatchApp .stop-watch-logs ul li span{
+    padding:5px;
+    max-inline-size: 100%;
+    overflow-wrap: break-word;
+    border: .5px solid #157e7e;
+    margin:5px;
+    border-radius: 4px;
+}
+#StopWatchApp .stop-watch-logs .stop-watch-log{
+    background:#157e7e1c;
+    padding:5px;
+    width:100%;
+    border-radius: 6px;
+    list-style: none;
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+}

@@ -20,6 +20,10 @@ export default function NoteContainer(props){
         props.deleteNote(props.id)
     }
 
+    function pinNote(e){
+        props.pinNote(props.id)
+    }
+
     useEffect(()=>{
         Heading.innerHTML = props.heading
         Content.innerHTML = props.content
@@ -36,9 +40,18 @@ export default function NoteContainer(props){
             <span className="note-created">
                 {props.created}
             </span>
-            <span className="delete-note" onClick={deleteNote}>
-                Delete Note
-            </span>
+            <div className='note-row'>
+                {props.pinned?
+                    <div className="pin-note" title="unpin" onClick={pinNote}>
+                        <img src="https://img.icons8.com/fluency-systems-filled/48/000000/pin.png"/>
+                    </div>:
+                    <div className="pin-note" title="pin to top" onClick={pinNote}>
+                        <img src="https://img.icons8.com/fluency-systems-regular/48/000000/pin.png"/>
+                    </div>}
+                <span className="delete-note" onClick={deleteNote}>
+                    <img src="https://img.icons8.com/fluency-systems-regular/48/000000/filled-trash.png"/>
+                </span>
+            </div>
 
             </div>
         </div>

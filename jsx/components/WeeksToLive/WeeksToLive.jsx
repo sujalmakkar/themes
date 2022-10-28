@@ -11,7 +11,7 @@ class WeeksToLive extends React.Component{
     }
 
     componentDidMount(){
-        fetch('/getData/dob',{
+        fetch('./getData/dob',{
             method:'GET',
             headers:{'content-Type':'application/json'}
         }).then(res=>res.json())
@@ -26,7 +26,7 @@ class WeeksToLive extends React.Component{
     setDob(e){
         this.setState({dob:e})
         var data = {dob:e}
-        fetch('/postData/dob',{
+        fetch('./postData/dob',{
             method:'POST',
             headers:{'Content-Type':'Application/json'},
             body:JSON.stringify(data)
@@ -35,7 +35,6 @@ class WeeksToLive extends React.Component{
     }
 
     weeksToLive(e){
-        // setInterval(()=>{
             const currentDate = new Date();
             const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
             var todayDate = currentDate.toLocaleDateString('en-us', options)
@@ -59,14 +58,16 @@ class WeeksToLive extends React.Component{
             var weeks = numsplit[0]+'.'+decimal
 
             this.setState({weeksToLive:weeksToLiveRound,weeksToLiveDecimal:weeks})
-            console.log('wtf',weeksToLiveRound,weeks)
-        // },20000000)
+    
     }
 
     render() {
         return(
             <div id="WeeksToLive" className='app'>
-                <div className="app-heading">TimeLine</div>
+                <div className="app-heading">
+                    <div>Your todos</div>
+                    <span>How many weeks until you Die.</span>
+                </div>
                 <div className="weeks-to-live-container">
                     {this.state.dob == '' ? <WeeksToLiveForm setDob={this.setDob}></WeeksToLiveForm> : ''}
                     <WeeksToLiveData weeksToLive={this.state.weeksToLive} weeksToLiveDecimal={this.state.weeksToLiveDecimal}></WeeksToLiveData>
