@@ -30,7 +30,7 @@ app.use(bodyParser.json())
 const port =  process.env.PORT || 3000
 
 const server = app.listen(port,()=>{
-    console.log('listening')
+    console.log(`listening on ${PORT}`)
 })
 
 const io = require('socket.io')(server);
