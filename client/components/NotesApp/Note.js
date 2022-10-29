@@ -2,9 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 
 import { io } from 'socket.io-client';
 
-var socket = io('http://localhost:3000');
+var socket = io('https://myworkflow.space:80');
 socket.on('connect', () => {
-
     null;
 });
 
