@@ -17,7 +17,7 @@ const http = require('http')
 const https = require('https')
 
 const mongoClient = require('mongodb').MongoClient;
-
+app.use('/', express.static('client' , { dotfiles: 'allow' }))
 app.use('/app', express.static('client' , { dotfiles: 'allow' }))
 app.use('/login', express.static('client/LoginPageIndex',{ dotfiles: 'allow' }))
 app.use('/register', express.static('client/RegisterPageIndex',{ dotfiles: 'allow' }))
