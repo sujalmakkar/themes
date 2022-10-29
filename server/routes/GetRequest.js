@@ -227,6 +227,7 @@ Router.get('/time/:week/:date',auth,async(req,res)=>{
 
             res.json({date:currentdate,timepassed:0})
 
+
             var insertweek = await DB.collection('productivity').updateOne({uid:req.uid},{
                 $addToSet:{
                     weeksreport:new_week
@@ -237,7 +238,8 @@ Router.get('/time/:week/:date',auth,async(req,res)=>{
             var currentdatedata = currentweekdata[0].dates.filter(a=>a.date == currentdate)
 
             if(currentdatedata.length<1){
-                var currentweekindex = inserted.weeksreport.filter(a=>a.week == currentweek)
+                var currentweekindex = inserted.weeksreport.findIndex(a=>a.week == currentweek)
+                console.log(currentweekindex,'current week index 2')
                 var new_date={
                     date:currentdate,
                     timepassed:0,
