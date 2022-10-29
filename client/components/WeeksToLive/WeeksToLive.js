@@ -67,7 +67,7 @@ class WeeksToLive extends React.Component {
                 React.createElement(
                     'div',
                     null,
-                    'Your todos'
+                    'Your Timeline'
                 ),
                 React.createElement(
                     'span',

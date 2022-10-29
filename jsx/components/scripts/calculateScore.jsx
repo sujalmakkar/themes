@@ -1,6 +1,6 @@
 export default function calculate_score(time){
 
-    var time = time?time:0
+    var time = time?time+150:0
 
     var total_seconds = time.toString().slice(0,-3)
 

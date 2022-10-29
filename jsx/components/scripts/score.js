@@ -35,7 +35,7 @@ export default function score(scoretoadd,time){
             body:JSON.stringify({week:currentWeek,date:today,time:time})
         })
         addscoredisplay()
-        var newscore = parseFloat  ((currentscore+scoretoadd).toString().slice(0,6))
+        var newscore = parseFloat((currentscore+scoretoadd).toString().slice(0,6))
         currentscore = newscore
         return newscore
     }else{
@@ -46,7 +46,7 @@ export default function score(scoretoadd,time){
     function addscoredisplay(){
         var scoredisplay = document.createElement('span')   
         scoredisplay.classList.add('add-score')
-        scoredisplay.textContent = '+' + scoretoadd.toString()
+        scoredisplay.textContent = '+' + (scoretoadd.toString()).slice(0,6)
         document.body.appendChild(scoredisplay) 
         setTimeout(()=>{
             scoredisplay.remove()

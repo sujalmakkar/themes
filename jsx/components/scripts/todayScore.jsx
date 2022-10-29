@@ -4,7 +4,7 @@ var score = 0
 
 export default function today_score(e){
     if(e>0){
-        score = parseFloat((calculate_score(parseInt(e))).toString().slice(0,6))
+        score = parseFloat((calculate_score(e)).toString().slice(0,6))
         return score
     }else{
         return score

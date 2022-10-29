@@ -131,7 +131,7 @@ export default function StopWatch(props){
                         var data = {minutes:parseInt(minutestext),seconds:seconds,hours:parseInt(hourstext),timepassed:timepassed}
                             if(timetosend.minutes != data.minutes){
                                 settimetosend(data)
-                                var scorebyminute = parseFloat(((scoreToAdd/60).toString()).slice(0,4))
+                                var scorebyminute = parseFloat((scoreToAdd/60))
                                 console.log(stopWatchTime.timepassed)
                                 addscore(scorebyminute,stopWatchTime.timepassed)
                                 today_score(stopWatchTime.timepassed)

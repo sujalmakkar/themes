@@ -18,6 +18,7 @@ const https = require('https')
 
 const mongoClient = require('mongodb').MongoClient;
 app.get('/',(req,res)=>{
+    res.send('hey there biatc')
 	console.log('listening')
 })
 app.use('/app', express.static('client' , { dotfiles: 'allow' }))
@@ -32,21 +33,21 @@ app.use(bodyParser.json())
 const port1 = 443
 const port = 80
 
-const privateKey1 = fs.readFileSync('/etc/letsencrypt/live/myworkflow.space/privkey.pem', 'utf8');
-const certificate1 = fs.readFileSync('/etc/letsencrypt/live/myworkflow.space/cert.pem', 'utf8');
-const ca1 = fs.readFileSync('/etc/letsencrypt/live/myworkflow.space/chain.pem', 'utf8');
-const credentials1 = {
-	key: privateKey1,
-	cert: certificate1,
-	ca: ca1
-};
+// const privateKey1 = fs.readFileSync('/etc/letsencrypt/live/myworkflow.space/privkey.pem', 'utf8');
+// const certificate1 = fs.readFileSync('/etc/letsencrypt/live/myworkflow.space/cert.pem', 'utf8');
+// const ca1 = fs.readFileSync('/etc/letsencrypt/live/myworkflow.space/chain.pem', 'utf8');
+// const credentials1 = {
+// 	key: privateKey1,
+// 	cert: certificate1,
+// 	ca: ca1
+// };
 
-const httpServer = http.createServer(app);
-const httpsServer = https.createServer(credentials1, app);
+// const httpServer = http.createServer(app);
+// const httpsServer = https.createServer(credentials1, app);
 
-httpsServer.listen(port1, () => {
-  console.log('HTTPS Server running on port 443');
-});
+// httpsServer.listen(port1, () => {
+//   console.log('HTTPS Server running on port 443');
+// });
 
 const server = app.listen(port,()=>{
     console.log('listening on port 80')

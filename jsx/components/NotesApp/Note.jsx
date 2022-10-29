@@ -3,9 +3,8 @@ import React,{useEffect,useState,useRef} from 'react'
 import {io} from 'socket.io-client'
 
 
-var socket = io('http://localhost:3000')
+var socket = io('https://www.myworkflow.space')
         socket.on('connect',()=>{
-            
             null
 })
 

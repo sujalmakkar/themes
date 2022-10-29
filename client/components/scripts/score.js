@@ -45,7 +45,7 @@ export default function score(scoretoadd, time) {
     function addscoredisplay() {
         var scoredisplay = document.createElement('span');
         scoredisplay.classList.add('add-score');
-        scoredisplay.textContent = '+' + scoretoadd.toString();
+        scoredisplay.textContent = '+' + scoretoadd.toString().slice(0, 6);
         document.body.appendChild(scoredisplay);
         setTimeout(() => {
             scoredisplay.remove();

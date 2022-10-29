@@ -65,7 +65,7 @@ class WeeksToLive extends React.Component{
         return(
             <div id="WeeksToLive" className='app'>
                 <div className="app-heading">
-                    <div>Your todos</div>
+                    <div>Your Timeline</div>
                     <span>How many weeks until you Die.</span>
                 </div>
                 <div className="weeks-to-live-container">
