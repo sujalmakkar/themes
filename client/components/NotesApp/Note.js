@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 
 import { io } from 'socket.io-client';
 
-var socket = io("https://myworkflow.space");
+var socket = io("http://myworkflow.space:80");
 // const socket = io("wss://server-domain.com");
 
 
