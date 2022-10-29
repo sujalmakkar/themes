@@ -3,10 +3,8 @@ import React,{useEffect,useState,useRef} from 'react'
 import {io} from 'socket.io-client'
 
 
-var socket = io('https://www.myworkflow.space')
-        socket.on('connect',()=>{
-            null
-})
+var socket = io("https://myworkflow.space");
+// const socket = io("wss://server-domain.com");
 
 
 export default function Note(props){
