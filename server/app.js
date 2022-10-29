@@ -12,25 +12,42 @@ const postData = require("./routes/PostRequest")
 const deleteUser = require("./routes/delete")
 const logout = require("./routes/logout")
 const authfn = require("./functions/authfn")
+const fs = require('fs')
+const http = require('http')
+const https = require('https')
 
 const mongoClient = require('mongodb').MongoClient;
 
-app.use('/app', express.static('client'))
-// app.get('/login', function(req, res) {
-//     res.sendFile(path.join(__dirname, '../client/login.html'));
-//   });
-app.use('/login', express.static('client/LoginPageIndex'))
-app.use('/register', express.static('client/RegisterPageIndex'))
+app.use('/app', express.static('client' , { dotfiles: 'allow' }))
+app.use('/login', express.static('client/LoginPageIndex',{ dotfiles: 'allow' }))
+app.use('/register', express.static('client/RegisterPageIndex',{ dotfiles: 'allow' }))
   
 
 app.use(cookieParser())
 require('dotenv').config()
 app.use(bodyParser.json())
 
-const port =  process.env.PORT || 443
+const port1 = 443
+const port = 80
+
+const privateKey1 = fs.readFileSync('/etc/letsencrypt/live/myworkflow.space/privkey.pem', 'utf8');
+const certificate1 = fs.readFileSync('/etc/letsencrypt/live/myworkflow.space/cert.pem', 'utf8');
+const ca1 = fs.readFileSync('/etc/letsencrypt/live/myworkflow.space/chain.pem', 'utf8');
+const credentials1 = {
+	key: privateKey1,
+	cert: certificate1,
+	ca: ca1
+};
+
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(credentials1, app);
+
+httpsServer.listen(port1, () => {
+  console.log('HTTPS Server running on port 443');
+});
 
 const server = app.listen(port,()=>{
-    console.log(`listening on ${port}`)
+    console.log('listening on port 80')
 })
 
 const io = require('socket.io')(server);
