@@ -13,7 +13,6 @@ mongoClient.connect(url=process.env.DB).then(client=>{
 var secret = process.env.SECRETJWT
 
 async function authfn(token) {
-    console.log(token)
     if(token == '' || token == "null" || token == null || !token){
             return null
     }else{

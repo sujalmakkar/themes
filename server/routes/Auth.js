@@ -18,7 +18,6 @@ var secret = process.env.SECRETJWT
 
 async function auth(req, res, next) {
     var token =  req.cookies['auth-token']
-    console.log(token,'token')
     if(token == '' || token == "null" || token == null){
         req.authenticated = false
         console.log('middleware does n exists')
