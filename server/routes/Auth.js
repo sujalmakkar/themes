@@ -20,7 +20,6 @@ async function auth(req, res, next) {
     var token =  req.cookies['auth-token']
     if(token == '' || token == "null" || token == null){
         req.authenticated = false
-        console.log('middleware does n exists')
         next()
     }else{
         console.log(secret)
