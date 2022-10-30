@@ -22,7 +22,6 @@ async function auth(req, res, next) {
         req.authenticated = false
         next()
     }else{
-        console.log(secret)
         var verified = jwt.verify(token,secret)
         var info = verified.uid
         var exists =  await DB.collection('productivity').findOne({uid:info})

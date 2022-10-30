@@ -71,7 +71,6 @@ io.on('connection',async socket=>{
     var cookiesv = cookievalue!==null?cookie.parse(cookievalue):null
     if(cookiesv!=null){
         var token = cookiesv['auth-token']
-        console.log(cookiesv,token)
         var uid = await authfn(token)
         socket.on('disconnect',()=>{
             console.log(socket.id)
