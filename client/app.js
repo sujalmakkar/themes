@@ -226,7 +226,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return logout; });\nfunction logout() {\n    fetch('./logoutuser', {\n        method: 'POST',\n        headers: { 'Content-Type': 'application/json' }\n    }).then(res => res.json()).then(location.reload()).catch(err => console.log(err));\n}\n\n//# sourceURL=webpack:///./client/components/LogoutButton/LogoutButton.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return logout; });\nfunction logout() {\n    fetch('./logoutuser', {\n        method: 'POST',\n        headers: { 'Content-Type': 'application/json' }\n    }).then(res => res.json()).then(result => {\n        if (result.status == 200) {\n            location.reload();\n        }\n    }).catch(err => console.log(err));\n}\n\n//# sourceURL=webpack:///./client/components/LogoutButton/LogoutButton.js?");
 
 /***/ }),
 
