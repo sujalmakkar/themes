@@ -67,21 +67,24 @@ mongoClient.connect(url=process.env.DB).then(client=>{
 
 // SOCKET TO EDIT NOTE DATA
 io.on('connection',async socket=>{
-    var cookies = cookie.parse(socket.handshake.headers.cookie);    
-    var token = cookies['auth-token']
-    console.log(cookies,token)
-    var uid = await authfn(token)
-    socket.on('disconnect',()=>{
-        console.log(socket.id)
-    })
-    socket.on('noteedit',async (e)=>{
-        await DB.collection('productivity').updateOne({uid:uid},
-            {$set:{"allnotes.$[note].data":e.data}},{
-            "arrayFilters": [
-              {"note.id" : e.id},
-            ]
+    var cookievalue = socket.handshake.headers.cookie?socket.handshake.headers.cookie:null
+    var cookiesv = cookievalue!==null?cookie.parse(cookievalue):null
+    if(cookiesv!=null){
+        var token = cookiesv['auth-token']
+        console.log(cookiesv,token)
+        var uid = await authfn(token)
+        socket.on('disconnect',()=>{
+            console.log(socket.id)
         })
-    })
+        socket.on('noteedit',async (e)=>{
+            await DB.collection('productivity').updateOne({uid:uid},
+                {$set:{"allnotes.$[note].data":e.data}},{
+                "arrayFilters": [
+                  {"note.id" : e.id},
+                ]
+            })
+        })
+    }
 })
 
 
